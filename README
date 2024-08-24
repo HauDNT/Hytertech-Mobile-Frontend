@@ -1,0 +1,78 @@
+# Giải thích cấu trúc thư mục
+api
+
+    ApiCalls.js: Chứa các hàm gọi API.
+    EndUrls.js: Chứa các URL endpoint cho các API.
+    index.js: Export các hàm và URL từ các file trong thư mục api.
+
+assets
+
+    fonts: Chứa các tệp font chữ dùng trong dự án.
+        font-name1.ttf, font-name2.ttf: Các tệp font cụ thể.
+    images: Chứa các tệp hình ảnh dùng trong dự án.
+        icon1.png, icon2.png: Các tệp hình ảnh cụ thể.
+
+components
+
+    common: Chứa các components dùng chung trong toàn bộ ứng dụng, chẳng hạn như buttons, inputs, 
+            hoặc các components cơ bản khác mà bạn có thể tái sử dụng ở nhiều nơi.
+    
+    layout: Chứa các components liên quan đến bố trí giao diện, như headers, footers, sidebars, 
+            hoặc các container giúp bố trí các phần khác nhau của ứng dụng.
+    
+    specific: Chứa các components đặc thù cho từng màn hình cụ thể hoặc tính năng đặc biệt trong ứng dụng.
+    
+    presentation:   Chứa các components chỉ liên quan đến việc hiển thị giao diện và không chứa bất kỳ logic 
+                    xử lý dữ liệu nào. Những components này thường nhận dữ liệu qua props và render UI dựa trên dữ liệu đó.
+
+constants
+
+    Enums.js: Chứa các enum dùng trong dự án.
+    Fonts.js: Chứa các định nghĩa về font dùng trong dự án.
+    Images.js: Chứa các định nghĩa về hình ảnh dùng trong dự án.
+    ScreenNames.js: Chứa các tên của các màn hình trong dự án.
+    StorageKeys.js: Chứa các khóa dùng cho lưu trữ dữ liệu.
+    Strings.js: Chứa các chuỗi dùng trong dự án.
+    Colors.js: Chứa các màu sắc dùng trong dự án.
+
+hooks
+
+    index.js: Chứa các custom hook dùng trong dự án.
+
+navigation
+
+    AppNavigator.js: Điều hướng chính của ứng dụng.
+    AuthNavigator.js: Điều hướng liên quan đến xác thực.
+    TabNavigator.js: Điều hướng dạng tab.
+
+redux
+
+    actions: Chứa các hành động (actions) dùng trong Redux.
+        Action1.js, Action2.js: Các file hành động cụ thể.
+    constants: Chứa các hằng số dùng trong Redux.
+        Constants1.js, Constants2.js: Các file hằng số cụ thể.
+    reducers: Chứa các bộ giảm (reducers) dùng trong Redux.
+        Reducer1.js, Reducer2.js: Các file reducer cụ thể.
+    store.js: Thiết lập store của Redux.
+
+screens
+
+    homeScreen: Màn hình home của ứng dụng.
+        index.js: Mã nguồn của màn hình.
+        styles.js: Các style liên quan đến màn hình.
+    aboutScreen: Màn hình about của ứng dụng.
+        index.js: Mã nguồn của màn hình.
+        styles.js: Các style liên quan đến màn hình.
+
+styles
+
+    GlobalStyle.js: Chứa các style toàn cục dùng trong dự án.
+
+utility
+
+    index.js: Chứa các hàm tiện ích dùng trong dự án.
+
+config: Để lưu trữ các cấu hình chung của dự án như cấu hình API, các biến môi trường (environment variables).
+
+services:   Tách các logic liên quan đến dịch vụ (services) vào một thư mục riêng. 
+            Thư mục này sẽ bao gồm các hàm xử lý logic phức tạp hoặc các công việc không chỉ là gọi API đơn thuần.

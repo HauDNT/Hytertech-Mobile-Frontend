@@ -1,0 +1,42 @@
+export const sensorListData = [
+    {
+        id: 1,
+        name: "T - 001",
+        image: "https://product.hstatic.net/1000069225/product/img_3348_e7d9042c0eda4162bcbd16333d66ca3a_1024x1024.jpg",
+        status: true,
+        created_at: "09/08/2024",
+        station_id: 1,
+    },
+    {
+        id: 2,
+        name: "L - 002",
+        image: "https://product.hstatic.net/1000069225/product/_bien_muc_chat_long_khong_tiep_xuc_y25_non-contact_liquid_level_sensor_5c00dbb0e3f9492db20e677582a25f63_1024x1024.jpg",
+        status: false,
+        created_at: "09/08/2024",
+        station_id: 2,
+    },
+    {
+        id: 3,
+        name: "Q - 003",
+        image: "https://product.hstatic.net/1000069225/product/bb0ad060-69ea-4c64-a131-6714debc776e_1_201_a_c9ca1872912d4879bba19c1a79d90944_1024x1024.jpg",
+        status: true,
+        created_at: "09/08/2024",
+        station_id: 3,
+    },
+    {
+        id: 4,
+        name: "P - 004",
+        image: "https://product.hstatic.net/1000069225/product/sen0169-v2-family_dc3f1c12227e4362822fa8758e05c88b_1024x1024.jpeg",
+        status: false,
+        created_at: "09/08/2024",
+        station_id: 4,
+    },
+    {
+        id: 5,
+        name: "E - 004",
+        image: "https://product.hstatic.net/1000069225/product/dfr0300_6b38f04dbf4d499db0eba2e8365aceeb_1024x1024.jpeg",
+        status: false,
+        created_at: "09/08/2024",
+        station_id: 5,
+    },
+];
