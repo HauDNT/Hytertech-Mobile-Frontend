@@ -1,25 +1,15 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { NotifiData } from "../../data/NotifiData";
-import { deleteData } from "../../config/SecureStorage";
-import Modal2 from "../common/Modals/Modal2";
+import { ThemeContext } from "../../context/ThemeContext";
 
 const Footer = () => {
     const route = useRoute();
     const navigation = useNavigation();
+    const { themeColors, themeState, setTheme } = useContext(ThemeContext);
     const [haveMessage, setHaveMessage] = useState();
-    const [modalVisible, setModalVisible] = useState(false);
-
-    const handleShowNotifiDetailsModal = () => {
-        setModalVisible(true);
-    };
-
-    const handleLogout = async () => {
-        await deleteData("token");
-        navigation.navigate("login");
-    };
 
     useEffect(() => {
         NotifiData.length > 0 ? 
@@ -31,36 +21,44 @@ const Footer = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.menuContainer} onPress={() => navigation.navigate("home")}>
-                <AntDesign name="home" style={[styles.icon, route.name === "home" && styles.active]} />
-                <Text style={[styles.iconText, route.name === "home" && styles.active]}>Trang chủ</Text>
+                <AntDesign name="home" style={[styles.icon, {color: themeColors.iconColor}, route.name === "home" && {color: themeColors.iconActive}]} />
+                <Text style={[styles.iconText, {color: themeColors.textColor}, route.name === "home" && {color: themeColors.iconActive}]}>Trang chủ</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuContainer} onPress={() => navigation.navigate("notification")}>
-                <AntDesign name="bells" style={[styles.icon, route.name === "notification" && styles.active]} />
-                <Text style={[styles.iconText, route.name === "notification" && styles.active]}>Thông báo</Text>
-
+                <AntDesign name="bells" style={[styles.icon, {color: themeColors.iconColor}, route.name === "notification" && {color: themeColors.iconActive}]} />
+                <Text style={[styles.iconText, {color: themeColors.textColor}, route.name === "notification" && {color: themeColors.iconActive}]}>Thông báo</Text>
                 {
                     haveMessage && <View style={styles.point}></View>
                 }
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuContainer} onPress={() => navigation.navigate("settings")}>
-                <AntDesign name="setting" style={[styles.icon, route.name === "settings" && styles.active]} />
-                <Text style={[styles.iconText, route.name === "settings" && styles.active]}>Cài đặt</Text>
+                <AntDesign name="setting" style={[styles.icon, {color: themeColors.iconColor}, route.name === "settings" && {color: themeColors.iconActive}]} />
+                <Text style={[styles.iconText, {color: themeColors.textColor}, route.name === "settings" && {color: themeColors.iconActive}]}>Cài đặt</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuContainer} onPress={() => handleShowNotifiDetailsModal()}>
-                <AntDesign name="logout" style={[styles.icon, route.name === "logout" && styles.active]} />
-                <Text style={[styles.iconText, route.name === "logout" && styles.active]}>Đăng xuất</Text>
-            </TouchableOpacity>
+            {/* <TouchableOpacity style={styles.menuContainer} onPress={() => handleShowNotifiDetailsModal()}>
+                <AntDesign name="logout" style={[styles.icon, {color: themeColors.iconColor}, route.name === "logout" && {color: themeColors.iconActive}]} />
+                <Text style={[styles.iconText, {color: themeColors.iconColor}, route.name === "logout" && {color: themeColors.iconActive}]}>Đăng xuất</Text>
+            </TouchableOpacity> */}
 
-            <Modal2
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-                title={"Đăng xuất"}
-                content={"Bạn muốn đăng xuất khỏi ứng dụng?"}
-                handleAction={() => handleLogout()}
-            />
+            {
+                themeState === "light" ?
+                (
+                    <TouchableOpacity style={styles.menuContainer} onPress={() => setTheme("dark")}>
+                        <AntDesign name="smile-circle" style={[styles.icon, {color: themeColors.iconColor}]} />
+                        <Text style={[styles.iconText, {color: themeColors.iconColor, textAlign: "center"}]}>Tối</Text>
+                    </TouchableOpacity>
+                )
+                :
+                (
+                    <TouchableOpacity style={styles.menuContainer} onPress={() => setTheme("light")}>
+                        <AntDesign name="smileo" style={[styles.icon, {color: themeColors.iconColor}, route.name === "logout" && {color: themeColors.iconActive}]} />
+                        <Text style={[styles.iconText, {color: themeColors.iconColor, textAlign: "center"}, route.name === "logout" && {color: themeColors.iconActive}]}>Sáng</Text>
+                    </TouchableOpacity>
+                )
+            }
         </View>
     );
 };
@@ -77,14 +75,10 @@ const styles = StyleSheet.create({
     },
     icon: {
         fontSize: 20,
-        color: "#000",
     },
     iconText: {
-        color: "#000",
         fontSize: 15,
-    },
-    active: {
-        color: "blue",
+        fontWeight: "600",
     },
     point: {
         position: "absolute",

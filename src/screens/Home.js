@@ -1,29 +1,41 @@
 // Components & libs
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, SafeAreaView } from "react-native";
 import Layout from "../components/layout/Layout";
 import Dashboard from "./dashboard/Dashboard";
 import { getData } from "../config/SecureStorage";
 import Toast from "react-native-toast-message";
 import AppLoading from "../components/common/AppLoading";
+import { ThemeContext } from "../context/ThemeContext";
 
 const Home = ({navigation}) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [getSecureDataLogin, setSecureDataLogin] = useState(null);
+    const { themeColors } = useContext(ThemeContext);
+
+    const [data, setData] = useState({
+        isLoading: true,
+        getSecureDataLogin: null,
+    });
+
+    const updateData = (key, value) => {
+        setData(prevData => ({
+            ...prevData,
+            [key]: value
+        }));
+    };
 
     const fetchSecureToken = async() => {
         const token = await getData("login-token");
-        setSecureDataLogin(token);
-        setIsLoading(false);
+        updateData("getSecureDataLogin", token);
+        updateData("isLoading", false);
     };
 
     useEffect(() => {
         fetchSecureToken();
     }, []);
-
+    
     useEffect(() => {
-        if (!isLoading) {
-            if (!getSecureDataLogin) {
+        if (!data.isLoading) {
+            if (!data.getSecureDataLogin) {
                 Toast.show({
                     type: 'error',
                     text1: "Truy cập không hợp lệ",
@@ -33,14 +45,14 @@ const Home = ({navigation}) => {
                 navigation.navigate("login");
             }
         }
-    }, [isLoading, getSecureDataLogin, navigation]);
+    }, [data.isLoading, data.getSecureDataLogin]);
 
-    if (isLoading) {
+    if (data.isLoading || !themeColors) {
         return <AppLoading/>;
     }
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={[styles.safeArea, {backgroundColor: themeColors.primaryBackgroundColor}]}>
             <Layout style={styles.container}>
                 <Dashboard/>
             </Layout>
@@ -51,26 +63,12 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: "#ffffff",
     },
     scrollView: {
         flexGrow: 1,
     },
     container: {
         flex: 1,
-    },
-    footer: {
-        display: "flex",
-        flex: 1,
-        width: "100%",
-        justifyContent: "flex-end",
-        zIndex: 100,
-        borderTopWidth: 1,
-        borderColor: "lightgray",
-        backgroundColor: "white",
-        position: "absolute",
-        bottom: 0,
-        padding: 10,
     },
 });
 

@@ -1,22 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import CustomCard from '../common/CustomCard';
+import { ThemeContext } from "../../context/ThemeContext";
 
 const { width } = Dimensions.get('window');
 
 const GridLayout = ({ amountItems, itemsOfRow, textCards, iconCards, redirectLinks}) => {
     const rows = [];
     const itemsPerRow = itemsOfRow;
+    const { themeColors } = useContext(ThemeContext);
 
     for (let i = 0; i < amountItems; i += itemsPerRow) {
-        // Lấy các item cho hàng hiện tại
         const items = [];
 
         for (let j = i; j < i + itemsPerRow && j < amountItems; j++) {
             items.push(
                 <CustomCard
                     key={j}
-                    color={"white"}
+                    themeColors={themeColors}
                     height={150}
                     width={(width / itemsPerRow) - 10}
                     text={textCards[j] ? textCards[j] : "Unknown"}
@@ -33,7 +34,7 @@ const GridLayout = ({ amountItems, itemsOfRow, textCards, iconCards, redirectLin
         );
     };
 
-    return <View style={styles.container}>{rows}</View>;
+    return <View style={[styles.container, {backgroundColor: themeColors.primaryBackgroundColor}]}>{rows}</View>;
 };
 
 const styles = StyleSheet.create({

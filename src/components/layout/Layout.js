@@ -1,19 +1,38 @@
-import {View, StyleSheet, ScrollView } from "react-native";
-import React from "react";
+import {View, StyleSheet, ScrollView, Text } from "react-native";
+import React, { useContext } from "react";
+import { ThemeContext } from "../../context/ThemeContext";
 import Footer from "./Footer";
 
 const Layout = ({children}) => {
+    const { themeColors } = useContext(ThemeContext);
+    
+    const childrenWithThemeColors = React.Children.map(children, child => {
+        if (React.isValidElement(child)) {
+            return React.cloneElement(child, { themeColors });
+        }
+        return child;
+    });
+
     return (
-        <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={styles.content}>
-                    {children}
+        themeColors ? 
+        (
+            <View style={[styles.container, { backgroundColor: themeColors.primaryBackgroundColor }]}>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    <View style={styles.content}>
+                        {childrenWithThemeColors}
+                    </View>
+                </ScrollView>
+                <View style={[styles.footer, { backgroundColor: themeColors.secondaryBackgroundColor, borderColor: themeColors.borderColorLight }]}>
+                    <Footer themeColors={themeColors} />
                 </View>
-            </ScrollView>
-            <View style={styles.footer}>
-                <Footer />
             </View>
-        </View>
+        )
+        :
+        (
+            <View>
+                <Text>Nothing</Text>
+            </View>
+        )
     );
 };
 
@@ -22,7 +41,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         position: "relative",
-        backgroundColor: "#fff",
     },
     scrollContainer: {
         flexGrow: 1,
@@ -33,18 +51,16 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         marginTop: 5,
-        paddingBottom: 300, // Đảm bảo nội dung không bị che khuất bởi footer
+        paddingBottom: 300,
     },
     footer: {
         width: "100%",
-        justifyContent: "center",
-        borderTopWidth: 1,
-        borderColor: "lightgray",
-        backgroundColor: "white",
         padding: 10,
+        bottom: 0,
         marginTop: 'auto',
         position: "absolute",
-        bottom: 0,
+        borderTopWidth: 1,
+        justifyContent: "center",
     },
 });
 

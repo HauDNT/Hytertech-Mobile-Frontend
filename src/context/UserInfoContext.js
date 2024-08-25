@@ -14,7 +14,6 @@ const UserInfoProvider = ({children}) => {
         district_id: "",
         ward_id: "",
         created_at: "",
-        updated_at: "",
     };
 
     const [userInfo, setUserInfo] = useState(initValues);
@@ -22,7 +21,6 @@ const UserInfoProvider = ({children}) => {
     const applyUserInfo = (data) => {
         console.log("Apply context: ", data);
         
-
         setUserInfo({
             ...userInfo,  // Kết hợp giá trị cũ với giá trị mới
             ...data,      // Ghi đè với các giá trị mới từ `data`

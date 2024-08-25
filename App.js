@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 import { LogBox } from "react-native";
@@ -20,12 +21,37 @@ import Settings from "./src/screens/settings/Settings";
 
 // Context API
 import { UserInfoProvider } from "./src/context/UserInfoContext";
+import { ThemeProvider, ThemeContext } from "./src/context/ThemeContext";
 
-// LogBox.ignoreAllLogs(true); // Vô hiệu hóa tất cả cảnh báo
+LogBox.ignoreAllLogs(true); // Vô hiệu hóa tất cả cảnh báo
 
 const Stack = createStackNavigator();
 
 export default function App() {
+    return (
+        <ThemeProvider>
+            <UserInfoProvider>
+                <NavigationWithTheme />
+            </UserInfoProvider>
+        </ThemeProvider>
+    );
+};
+
+function NavigationWithTheme() {
+    const { themeColors } = useContext(ThemeContext);
+
+    const styles = {
+        headerStyle: {
+            backgroundColor: themeColors.headerColor,
+        },
+        headerTintColor: '#000',
+        headerTitleStyle: {
+            color: themeColors.textColor,
+            fontWeight: 'bold',
+            fontSize: 18,
+        },
+    };
+
     return (
         <UserInfoProvider>
             <NavigationContainer>
@@ -57,14 +83,3 @@ export default function App() {
         </UserInfoProvider>
     );
 };
-
-const styles = {
-    headerStyle: {
-        backgroundColor: '#EEF7FF',
-    },
-    headerTintColor: '#000', // Màu chữ của tiêu đề
-    headerTitleStyle: {
-      fontWeight: 'bold', // Định dạng font chữ
-      fontSize: 18, // Kích thước font chữ
-    },
-}

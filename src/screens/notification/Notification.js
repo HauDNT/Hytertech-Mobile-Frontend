@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import Layout from "../../components/layout/Layout";
 import NotifiList from "../../components/specific/Notification/NotifiList";
 import { NotifiData } from "../../data/NotifiData";
@@ -13,9 +12,5 @@ const Notification = () => {
         </Layout>
     );
 };
-
-const styles = StyleSheet.create({
-
-});
 
 export default Notification;

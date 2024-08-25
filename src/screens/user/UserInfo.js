@@ -9,18 +9,24 @@ import Divider from "../../components/common/Divider";
 import CustomInput from "../../components/common/CustomInput";
 import CustomCombobox from "../../components/common/CustomCombobox";
 import { formatAndDisplayDatetime } from "../../utils/FormatDateTime";
+import { deleteData } from "../../config/SecureStorage";
+import Modal2 from "../../components/common/Modals/Modal2";
 
+import { ThemeContext } from "../../context/ThemeContext";
 import { UserInfoContext } from "../../context/UserInfoContext";
 import userAvatar from "../../assets/images/avatar.jpg";
 import axiosInstance from '../../config/axiosInstance';
 
 const UserInfo = () => {
+    const { themeColors } = useContext(ThemeContext);
     const { userInfo, applyUserInfo } = useContext(UserInfoContext);
+
     const [data, setData] = useState({
         isLoading: true,
         addressLevel1: [],
         addressLevel2: [],
         addressLevel3: [],
+        modalVisible: false,
     });
 
     const updateData = (key, value) => {
@@ -99,10 +105,19 @@ const UserInfo = () => {
         }
     };
 
+    const handleShowNotifiDetailsModal = () => {
+        updateData("modalVisible", true);
+    };
+
+    const handleLogout = async () => {
+        await deleteData("token");
+        navigation.navigate("login");
+    };
+
     useEffect(() => {
-        getAddressLevel1();
-        getAddressLevel2(initValues.city_id);
-        getAddressLevel3(initValues.district_id);
+        // getAddressLevel1();
+        // getAddressLevel2(initValues.city_id);
+        // getAddressLevel3(initValues.district_id);
 
         setTimeout(() => {
             updateData("isLoading", false);
@@ -115,7 +130,7 @@ const UserInfo = () => {
         :
         (
             <Layout>
-                <View style={styles.container}>
+                <View style={[styles.container, {backgroundColor: themeColors.backgroundColor, borderColor: themeColors.borderColorLight}]}>
                     <View style={styles.contentWrap}>
                         <TouchableOpacity>
                             <Image 
@@ -128,7 +143,7 @@ const UserInfo = () => {
                     <Divider/>
 
                     <View style={styles.contentWrap}>
-                        <Text style={[styles.subHeader, {fontSize: 18, fontWeight: "800", marginBottom: 20}]}>Thông tin cá nhân</Text>
+                        <Text style={[styles.subHeader, {fontSize: 18, fontWeight: "800", marginBottom: 20, color: themeColors.textColor}]}>Thông tin cá nhân</Text>
 
                         <View style={styles.form}>
                             <Formik
@@ -173,7 +188,7 @@ const UserInfo = () => {
                                         />
 
 
-                                        <Text style={[styles.subHeader]}>Địa chỉ</Text>
+                                        <Text style={[styles.subHeader, {color: themeColors.textColor}]}>Địa chỉ</Text>
                                         <CustomCombobox 
                                             label={"Tỉnh / Thành phố"}
                                             title={"Chọn"}
@@ -217,16 +232,39 @@ const UserInfo = () => {
                                             value={formatAndDisplayDatetime(values.created_at)}
                                             enableEdit={false}
                                         />
-
-                                        <View style={{width: "97%", margin: "auto"}}>
-                                            <Button onPress={handleSubmit} title="Cập nhật"/>
-                                        </View>
+                                        
+                                        <TouchableOpacity 
+                                            style={[
+                                                styles.button, 
+                                                {backgroundColor: themeColors.blueColor, marginTop: 20,}
+                                            ]} 
+                                            onPress={handleSubmit}
+                                        >
+                                            <Text style={[styles.btnText, {color: "white"}]}>Cập nhật</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 )}
                                 </Formik>
+
+                                <TouchableOpacity 
+                                    style={[
+                                        styles.button, 
+                                        {backgroundColor: themeColors.redColor, marginTop: 20,}
+                                    ]} 
+                                    onPress={() => handleShowNotifiDetailsModal()}
+                                >
+                                    <Text style={[styles.btnText, {color: "white"}]}>Đăng xuất</Text>
+                                </TouchableOpacity>
                         </View>
                     </View>
                 </View>
+                <Modal2
+                    visible={data.modalVisible}
+                    onRequestClose={() => updateData("modalVisible", false)}
+                    title={"Đăng xuất"}
+                    content={"Bạn muốn đăng xuất khỏi ứng dụng?"}
+                    handleAction={() => handleLogout()}
+                />
             </Layout>
         )
     );
@@ -239,9 +277,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: "#ddd",
-        backgroundColor: "white",
-        elevation: 2,
     },
     contentWrap: {
         paddingTop: 10,
@@ -286,6 +321,18 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderRadius: 5,
     },
+    button: {
+        width: "97%",
+        height: 45,
+        margin: "auto",
+        justifyContent: "center",
+        borderRadius: 25,
+    },
+    btnText: {
+        textAlign: "center",
+        fontWeight: "700",
+        fontSize: 16,
+    }
 });
 
 export default UserInfo;

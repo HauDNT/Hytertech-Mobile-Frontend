@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FlatList, Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Modal1 from "../../common/Modals/Modal1";
 import notifiIcon from "../../../assets/icons/notifi-icon.png";
 import { NotifiData } from "../../../data/NotifiData";
+import { ThemeContext } from "../../../context/ThemeContext";
 
 const NotifiList = ({ data, fields = []}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState({title: "", content: ""});
+    const { themeColors } = useContext(ThemeContext);
 
     const handleShowNotifiDetailsModal = (id, msgTitle, msgContent) => {
         setModalContent({title: msgTitle, content: msgContent});
@@ -44,7 +46,13 @@ const NotifiList = ({ data, fields = []}) => {
         return (
             <>
                 <TouchableOpacity 
-                    style={[styles.container, !isChecked && {backgroundColor: "#FEFBD8"}]}
+                    style={[
+                        styles.container, 
+                        !isChecked ? 
+                        {backgroundColor: themeColors.secondaryBackgroundColor}
+                        :
+                        {backgroundColor: themeColors.primaryBackgroundColor}
+                    ]}
                     onPress={() => handleShowNotifiDetailsModal(id, title, message)}
                 >
                     <View style={styles.row}>
@@ -53,19 +61,19 @@ const NotifiList = ({ data, fields = []}) => {
                         </View>
                         <View style={styles.contentContainer}>
                             <View style={styles.headingMsg}>
-                                <Text style={styles.msgTitle}>{title}</Text>
+                                <Text style={[styles.msgTitle, {color: themeColors.textColor}]}>{title}</Text>
 
                                 {
                                     !isChecked && <View style={styles.point}></View>
                                 }
                             </View>
                             <View style={styles.msgDateTime}>
-                                <Text style={styles.textTime}>{timeSend}</Text>
+                                <Text style={[styles.textTime, {color: themeColors.textBlurColor}]}>{timeSend}</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.message} numberOfLines={2} ellipsizeMode="tail">
+                        <Text style={[styles.message, {color: themeColors.textColor}]} numberOfLines={2} ellipsizeMode="tail">
                             {message}
                         </Text>
                     </View>
@@ -158,7 +166,6 @@ const styles = StyleSheet.create({
     },
     textTime: {
         fontSize: 14,
-        color: "#9BA4B4",
     },
     message: {
         paddingLeft: 15,

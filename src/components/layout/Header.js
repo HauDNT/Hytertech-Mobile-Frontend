@@ -5,17 +5,17 @@ import { View, StyleSheet, Image } from "react-native";
 import { Text } from '@rneui/themed';
 import userAvatar from "../../assets/images/avatar-2.jpg";
 
-const Header = ({title_1, title_2}) => {
+const Header = ({title_1, title_2, themeColors}) => {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate("userinfo")}>
+        <TouchableOpacity style={[styles.container, {backgroundColor: themeColors.secondaryBackgroundColor}]} onPress={() => navigation.navigate("userinfo")}>
             <View style={styles.leftHalf}>
-                <Text style={styles.text}>{title_1}</Text>
-                <Text style={[styles.text, {fontWeight: "bold"}]}>{title_2}</Text>
+                <Text style={[styles.text, {color: themeColors.textColor}]}>{title_1}</Text>
+                <Text style={[styles.text, {color: themeColors.textColor, fontWeight: "bold"}]}>{title_2}</Text>
             </View>
             <View style={styles.rightHalf}>
-                <Image source={userAvatar} style={styles.avatar}/>
+                <Image source={userAvatar} style={[styles.avatar, {borderColor: themeColors.borderColorLight}]}/>
             </View>
         </TouchableOpacity>
     )
@@ -23,8 +23,7 @@ const Header = ({title_1, title_2}) => {
 
 const styles = StyleSheet.create({
     container: {
-        height: 120, 
-        backgroundColor: "white",
+        height: 120,
         flexDirection: "row",
         margin: 5,
         borderRadius: 10,
@@ -46,12 +45,10 @@ const styles = StyleSheet.create({
     text: {
         paddingLeft: 20,
         fontSize: 17,
-        color: "#000",
     },
     avatar: {
         width: 100,
         height: 100,
-        borderColor: "#ccc",
         borderWidth: 1,
         borderRadius: 100,
     }

@@ -1,19 +1,21 @@
 import React, { useContext, useEffect } from "react";
-import { Text } from '@rneui/themed';
-import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
+import { Text } from '@rneui/themed';
+import * as Yup from 'yup';
 import Toast from "react-native-toast-message";
 import axiosInstance from "../../config/axiosInstance";
 import { getData, saveData, deleteData } from "../../config/SecureStorage";
 import CustomInput from "../../components/common/CustomInput";
 import { UserInfoContext } from "../../context/UserInfoContext";
+import { ThemeContext } from "../../context/ThemeContext";
 
 const Login = ({navigation}) => {
+    const { themeColors } = useContext(ThemeContext);
     const { applyUserInfo } = useContext(UserInfoContext);
 
     const initvalues = {
-        username: "0788806282",
+        username: "tienhau.it@gmail.com",
         password: "root_admin_9999",
     };
 
@@ -38,28 +40,30 @@ const Login = ({navigation}) => {
         try {
             const response = await axiosInstance
                 .post(
-                    "/auth/login", 
+                    "/login", 
                     {
-                        username: data.username,
+                        email: data.username,
                         password: data.password,
                     }
                 );
 
             // Đăng nhập thành công
-            if (response.data && response.data.success) {
+            if (response.data && response.data.access_token) {
                 // Reset form
                 resetForm();
 
                 // Lưu dữ liệu vào SecureStorage
-                await saveData("login-token", response.data.token);
+                await saveData("login-token", response.data.access_token);
 
-                // Lưu thông tin tài khoản vào UserInfoContext
-                applyUserInfo(response.data.info);
+                // // Lưu thông tin tài khoản vào UserInfoContext
+                applyUserInfo(response.data.info[0]);
 
                 // Chuyển hướng
                 navigation.navigate("home");
             };
         } catch (error) {
+            console.log(error);
+            
             Toast.show({
                 type: "error",
                 text1: "Đăng nhập thất bại",
@@ -89,20 +93,22 @@ const Login = ({navigation}) => {
                             handleChange={handleChange('username')}
                             handleBlur={handleBlur('username')}
                             value={values.username}
+                            hardColor={"#000"}
                         />
                         <CustomInput 
                             label={"Mật khẩu"}
                             handleChange={handleChange('password')}
                             handleBlur={handleBlur('password')}
                             value={values.password}
+                            hardColor={"#000"}
                         />
 
                         <View style={styles.btnContainer}>
-                            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                            <TouchableOpacity style={[styles.button, {backgroundColor: themeColors.blueColor, elevation: 3}]} onPress={handleSubmit}>
                                 <Text style={[styles.btnText, {color: "#fff"}]}>Đăng nhập</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[styles.button, {backgroundColor: "#fff", borderColor: "#7EA1FF", borderWidth: 1.5}]}>
+                            <TouchableOpacity style={[styles.button, {backgroundColor: themeColors.whiteColor, borderColor: themeColors.blueColor, borderWidth: 1.5}]}>
                                 <Text style={styles.btnText}>Quên mật khẩu?</Text>
                             </TouchableOpacity>
                         </View>
@@ -156,9 +162,7 @@ const styles = StyleSheet.create({
         height: 45,
         margin: "auto",
         justifyContent: "center",
-        backgroundColor: "#7EA1FF",
         borderRadius: 25,
-        elevation: 3,
     },
     btnText: {
         textAlign: "center",

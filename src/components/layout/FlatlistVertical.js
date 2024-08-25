@@ -1,5 +1,7 @@
+import React, { useContext } from 'react';
+import { ThemeContext } from "../../context/ThemeContext";
 import { FlatList, Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import blankImage from "../../assets/images/blank.png"
+import blankImage from "../../assets/images/blank.png";
 
 /* Fields truyền vào component FlatlistVertical có thứ tự: 
     + id
@@ -10,6 +12,8 @@ import blankImage from "../../assets/images/blank.png"
 */
 
 const FlatlistVertical = ({ data, noteFields = [], fields = [], onItemPress = () => { return }}) => {
+    const { themeColors } = useContext(ThemeContext);
+    
     const renderItem = ({ item }) => {
         const itemData = {
             id: item[fields[0]],
@@ -24,17 +28,32 @@ const FlatlistVertical = ({ data, noteFields = [], fields = [], onItemPress = ()
 
     const FlatListItem = ({id, title_1 = "", content_1 = "", content_2 = "", image}) => {
         return (
-            <TouchableOpacity style={styles.itemContainer} onPress={() => onItemPress(id)}>
+            <TouchableOpacity 
+                style={[
+                    styles.itemContainer,
+                    {
+                        backgroundColor: themeColors.secondaryBackgroundColor
+                    }
+                ]} 
+                onPress={() => onItemPress(id)}
+            >
                 <View style={styles.leftHalf}>
-                    <Text style={[styles.text, {fontWeight: "bold", paddingBottom: 5}]} numberOfLines={1} ellipsizeMode='tail'>
+                    <Text 
+                        style={[
+                            styles.text, 
+                            {fontWeight: "bold", paddingBottom: 5, color: themeColors.textColor}
+                        ]} 
+                        numberOfLines={1}
+                        ellipsizeMode='tail'
+                    >
                         {noteFields[0]}{title_1}
                     </Text>
-                    <Text style={[styles.text, {paddingBottom: 5, fontSize: 15}]}>{noteFields[1]} {content_1}</Text>
+                    <Text style={[styles.text, {paddingBottom: 5, fontSize: 15, color: themeColors.textBlurColor}]}>{noteFields[1]} {content_1}</Text>
                     {
                         content_2 ?
-                        (<Text style={[styles.text, {paddingBottom: 5, fontSize: 15}]}>{noteFields[2]}{content_2}</Text>)
+                        (<Text style={[styles.text, {paddingBottom: 5, fontSize: 15, color: themeColors.textBlurColor}]}>{noteFields[2]}{content_2}</Text>)
                         :
-                        (<Text style={[styles.text, {paddingTop: 3, fontSize: 13, color: "#3572EF"}]}>(Xem thêm...)</Text>)
+                        (<Text style={[styles.text, {paddingTop: 3, fontSize: 13, color: themeColors.textBlurColor}]}>(Nhấp vào để xem chi tiết)</Text>)
                     }
                 </View>
                 <View style={styles.rightHalf}>
@@ -65,7 +84,6 @@ const FlatlistVertical = ({ data, noteFields = [], fields = [], onItemPress = ()
 const styles = StyleSheet.create({
     itemContainer: {
         height: 100, 
-        backgroundColor: "white",
         flexDirection: "row",
         margin: 5,
         marginTop: 0,

@@ -1,15 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
+import { ThemeContext } from "../../context/ThemeContext";
 
-const CustomInput = ({label, handleBlur, handleChange, value, enableEdit = true, keyboardType = ""}) => {
+const CustomInput = ({label, handleBlur, handleChange, value, enableEdit = true, keyboardType = "", hardColor}) => {
+    const { themeColors } = useContext(ThemeContext);
     return (
         <View>
-            <Text style={styles.label}>{label}</Text>
+            <Text style={[
+                styles.label, 
+                hardColor ? {color: hardColor} : {color: themeColors.textColor}]}>{label}</Text>
             <TextInput
                 onChangeText={handleChange}
                 onBlur={handleBlur}
                 value={value}
-                style={[styles.input, !enableEdit && {backgroundColor: "#eee"}]}
+                style={[
+                    styles.input, 
+                    !enableEdit && !themeColors == "dark" && {backgroundColor: "#eee"}, 
+                    hardColor ? {color: hardColor} : {color: themeColors.textColor}
+                ]}
                 editable={enableEdit}
                 keyboardType={keyboardType}
             />

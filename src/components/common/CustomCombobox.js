@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useContext } from "react";
 import { View, Text, StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import { ThemeContext } from "../../context/ThemeContext";
 
 const CustomCombobox = ({label, title, data, value, onChange = () => {}}) => {
+    const { themeColors } = useContext(ThemeContext);
+
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{label}</Text>
+            <Text style={[styles.label, {color: themeColors.textColor}]}>{label}</Text>
             <Dropdown
                 style={styles.dropdownMenu}
-                placeholderStyle={{ color: 'gray' }}
-                selectedTextStyle={{ color: 'black' }}
+                placeholderStyle={{ color: themeColors.textColor }}
+                selectedTextStyle={{ color: themeColors.textColor }}
                 data={data}
                 labelField="label"
                 valueField="value"
