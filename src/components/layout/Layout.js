@@ -14,25 +14,16 @@ const Layout = ({children}) => {
     });
 
     return (
-        themeColors ? 
-        (
-            <View style={[styles.container, { backgroundColor: themeColors.primaryBackgroundColor }]}>
-                <ScrollView contentContainerStyle={styles.scrollContainer}>
-                    <View style={styles.content}>
-                        {childrenWithThemeColors}
-                    </View>
-                </ScrollView>
-                <View style={[styles.footer, { backgroundColor: themeColors.secondaryBackgroundColor, borderColor: themeColors.borderColorLight }]}>
-                    <Footer themeColors={themeColors} />
+        <View style={[styles.container, { backgroundColor: themeColors.primaryBackgroundColor }]}>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <View style={styles.content}>
+                    {childrenWithThemeColors}
                 </View>
+            </ScrollView>
+            <View style={[styles.footer, { backgroundColor: themeColors.secondaryBackgroundColor, borderColor: themeColors.borderColorLight }]}>
+                <Footer themeColors={themeColors} />
             </View>
-        )
-        :
-        (
-            <View>
-                <Text>Nothing</Text>
-            </View>
-        )
+        </View>
     );
 };
 

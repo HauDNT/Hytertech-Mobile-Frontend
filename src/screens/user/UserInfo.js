@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Button, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import Toast from "react-native-toast-message";
@@ -18,14 +19,15 @@ import userAvatar from "../../assets/images/avatar.jpg";
 import axiosInstance from '../../config/axiosInstance';
 
 const UserInfo = () => {
+    const navigation = useNavigation();
     const { themeColors } = useContext(ThemeContext);
     const { userInfo, applyUserInfo } = useContext(UserInfoContext);
 
     const [data, setData] = useState({
         isLoading: true,
-        addressLevel1: [],
-        addressLevel2: [],
-        addressLevel3: [],
+        cities: [],
+        districts: [],
+        wards: [],
         modalVisible: false,
     });
 
@@ -58,29 +60,29 @@ const UserInfo = () => {
         ward_id: Yup.number().required("Bắt buộc"),
     });
 
-    const getAddressLevel1 = async () => {
-        const response = await axiosInstance.get("/address/level1");
-        updateData("addressLevel1", response.data);
+    const getCities = async () => {
+        const response = await axiosInstance.get("/cities");
+        updateData("cities", response.data.data);
     };
 
-    const getAddressLevel2 = async (addressLV1Id) => {
-        const response = await axiosInstance.get(`/address/level2?level1=${addressLV1Id}`);
-        updateData("addressLevel2", response.data);
+    const getDistricts = async (cityId) => {
+        const response = await axiosInstance.get(`/districts/${cityId}`);
+        updateData("districts", response.data.data);
     };
 
-    const getAddressLevel3 = async (addressLV2Id) => {
-        const response = await axiosInstance.get(`/address/level3?level2=${addressLV2Id}`);
-        updateData("addressLevel3", response.data);
+    const getWards = async (districtId) => {
+        const response = await axiosInstance.get(`/wards/${districtId}`);
+        updateData("wards", response.data.data);
     };
 
     const selectAddress = (addessLevel, setFieldValue, field, value) => {
         switch (addessLevel) {
             case 1:
-                getAddressLevel2(value);
-                updateData("addressLevel3", []);
+                getDistricts(value);
+                updateData("wards", []);
                 break;
             case 2:
-                getAddressLevel3(value);
+                getWards(value);
                 break;
         };
 
@@ -115,9 +117,9 @@ const UserInfo = () => {
     };
 
     useEffect(() => {
-        // getAddressLevel1();
-        // getAddressLevel2(initValues.city_id);
-        // getAddressLevel3(initValues.district_id);
+        getCities();
+        getDistricts(initValues.city_id);
+        getWards(initValues.district_id);
 
         setTimeout(() => {
             updateData("isLoading", false);
@@ -130,7 +132,7 @@ const UserInfo = () => {
         :
         (
             <Layout>
-                <View style={[styles.container, {backgroundColor: themeColors.backgroundColor, borderColor: themeColors.borderColorLight}]}>
+                <View style={[styles.container, {backgroundColor: themeColors.primaryBackgroundColor, borderColor: themeColors.borderColorLight}]}>
                     <View style={styles.contentWrap}>
                         <TouchableOpacity>
                             <Image 
@@ -193,7 +195,7 @@ const UserInfo = () => {
                                             label={"Tỉnh / Thành phố"}
                                             title={"Chọn"}
                                             data={
-                                                data.addressLevel1 && data.addressLevel1.map(item => ({
+                                                data.cities && data.cities.map(item => ({
                                                     label: item.name_city, 
                                                     value: item.id,
                                                 }))
@@ -205,7 +207,7 @@ const UserInfo = () => {
                                             label={"Quận / Huyện / Thị xã"}
                                             title={"Chọn"}
                                             data={
-                                                data.addressLevel2 && data.addressLevel2.map(item => ({
+                                                data.districts && data.districts.map(item => ({
                                                     label: item.name_district, 
                                                     value: item.id,
                                                 }))
@@ -217,7 +219,7 @@ const UserInfo = () => {
                                             label={"Xã / Phường / Thị trấn"}
                                             title={"Chọn"}
                                             data={
-                                                data.addressLevel3 && data.addressLevel3.map(item => ({
+                                                data.wards && data.wards.map(item => ({
                                                     label: item.name_ward, 
                                                     value: item.id,
                                                 }))

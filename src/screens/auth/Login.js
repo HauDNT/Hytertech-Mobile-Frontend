@@ -42,7 +42,7 @@ const Login = ({navigation}) => {
                 .post(
                     "/login", 
                     {
-                        email: data.username,
+                        username: data.username,
                         password: data.password,
                     }
                 );

@@ -1,5 +1,6 @@
-import envConfig from "../config/EnvConfig";
 import axios from "axios";
+import envConfig from "../config/EnvConfig";
+import { getData } from "../config/SecureStorage";
 
 // Instance axios với cấu hình mặc định
 const axiosInstance = axios.create({
@@ -12,15 +13,12 @@ const axiosInstance = axios.create({
 
 // Interceptor để xử lý request
 axiosInstance.interceptors.request.use(
-    config => {
-        // Ở đây chúng ta sẽ thực hiện 1 thao tác gì đó trước khi gửi request
-        // Ví dụ: Thêm token, role_id vào header để thông qua middleware
+    async config => {
+        const token = await getData("login-token");
 
-        // const token = localStorage.getItem("token");
-
-        // if (token) {
-        //     config.headers.Authorization = `${token}`;
-        // };
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        };
 
         return config;
     },

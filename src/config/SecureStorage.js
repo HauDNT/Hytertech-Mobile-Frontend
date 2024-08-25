@@ -14,7 +14,7 @@ export const saveData = async (key, value) => {
 export const getData = async (key) => {
     try {
         const value = await SecureStore.getItemAsync(key);
-        console.log('Dữ liệu đã lấy:', value);
+        // console.log('Dữ liệu đã lấy:', value);
         return value;
     } catch (error) {
         console.error('Lỗi khi lấy dữ liệu', error);
@@ -25,7 +25,7 @@ export const getData = async (key) => {
 export const deleteData = async (key) => {
     try {
         await SecureStore.deleteItemAsync(key);
-        console.log('Dữ liệu đã được xóa');
+        // console.log('Dữ liệu đã được xóa');
     } catch (error) {
         console.error('Lỗi khi xóa dữ liệu', error);
     }

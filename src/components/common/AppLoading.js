@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { ThemeContext } from "../../context/ThemeContext";
 import LottieView from "lottie-react-native";
 import LoadingAnimation from "../../assets/animations/LoadingDrop-1.json";
 
 const AppLoading = () => {
+    const { themeColors } = useContext(ThemeContext);
+
     return (
-        <View style={[StyleSheet.absoluteFillObject, styles.container]}>
+        <View style={[StyleSheet.absoluteFillObject, styles.container, {backgroundColor: themeColors.primaryBackgroundColor}]}>
             <LottieView
                 source={LoadingAnimation}
                 autoPlay
@@ -19,7 +22,7 @@ const AppLoading = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: 500,
+        height: "100%",
         justifyContent: "center",
         alignItems: "center",
         zIndex: 100,
