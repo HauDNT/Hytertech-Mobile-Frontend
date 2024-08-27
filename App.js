@@ -18,12 +18,12 @@ import Rating from "./src/screens/rating/Rating";
 import UserInfo from "./src/screens/user/UserInfo";
 import Notification from "./src/screens/notification/Notification";
 import Settings from "./src/screens/settings/Settings";
-
+import A from "./src/assets/images/favicon.png"
 // Context API
 import { UserInfoProvider } from "./src/context/UserInfoContext";
 import { ThemeProvider, ThemeContext } from "./src/context/ThemeContext";
 
-LogBox.ignoreAllLogs(true); // Vô hiệu hóa tất cả cảnh báo
+// LogBox.ignoreAllLogs(true); // Vô hiệu hóa tất cả cảnh báo
 
 const Stack = createStackNavigator();
 

@@ -15,17 +15,17 @@ const lightTheme = {
 
 const darkTheme = {
     textColor: "#FFFFFF",
-    textBlurColor: "#FFFFFF",
+    textBlurColor: "#B3B3B3",
     blueColor: "#7EA1FF",
     redColor: "#F5004F",
-    primaryBackgroundColor: "#393646",
-    secondaryBackgroundColor: "#635985",
-    borderColorLight: "#DDDDDD",
-    blockColor: "#635985",
-    iconColor: "#FFFFFF",
-    iconActive: "#F2F7A1",
+    primaryBackgroundColor: "#121212",
+    secondaryBackgroundColor: "#292929",
+    borderColorLight: "#FFFFFF33",
+    blockColor: "#3A3A3A",
+    iconColor: "#666666",
+    iconActive: "#FFFFFF",
     whiteColor: "#FFFFFF",
-    headerColor: "#635985",
+    headerColor: "#292929",
 };
 
 export default {lightTheme, darkTheme};

@@ -38,11 +38,6 @@ const Footer = () => {
                 <Text style={[styles.iconText, {color: themeColors.textColor}, route.name === "settings" && {color: themeColors.iconActive}]}>Cài đặt</Text>
             </TouchableOpacity>
 
-            {/* <TouchableOpacity style={styles.menuContainer} onPress={() => handleShowNotifiDetailsModal()}>
-                <AntDesign name="logout" style={[styles.icon, {color: themeColors.iconColor}, route.name === "logout" && {color: themeColors.iconActive}]} />
-                <Text style={[styles.iconText, {color: themeColors.iconColor}, route.name === "logout" && {color: themeColors.iconActive}]}>Đăng xuất</Text>
-            </TouchableOpacity> */}
-
             {
                 themeState === "light" ?
                 (
@@ -55,7 +50,7 @@ const Footer = () => {
                 (
                     <TouchableOpacity style={styles.menuContainer} onPress={() => setTheme("light")}>
                         <AntDesign name="smileo" style={[styles.icon, {color: themeColors.iconColor}, route.name === "logout" && {color: themeColors.iconActive}]} />
-                        <Text style={[styles.iconText, {color: themeColors.iconColor, textAlign: "center"}, route.name === "logout" && {color: themeColors.iconActive}]}>Sáng</Text>
+                        <Text style={[styles.iconText, {color: themeColors.iconActive, textAlign: "center"}, route.name === "logout" && {color: themeColors.iconActive}]}>Sáng</Text>
                     </TouchableOpacity>
                 )
             }

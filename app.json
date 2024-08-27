@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "client",
-    "slug": "client",
+    "name": "Hytertech",
+    "slug": "DynamicUI",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./src/assets/images/blank.png",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/images/blank.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,16 +16,24 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.client"
+      "package": "com.thomas1812003.DynamicUI"
     },
     "web": {
-      "favicon": "./src/assets/images/favicon.png"
+      "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-secure-store"
-    ]
+    "extra": {
+      "eas": {
+        "projectId": "2e59e63b-6fad-4762-904c-79b933bfade4"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2e59e63b-6fad-4762-904c-79b933bfade4"
+    }
   }
 }
