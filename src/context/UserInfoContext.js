@@ -5,6 +5,7 @@ const UserInfoContext = createContext();
 const UserInfoProvider = ({children}) => {
     const initValues = {
         id: "",
+        avatar: "",
         email: "",
         full_name: "",
         tel: "",
@@ -19,8 +20,6 @@ const UserInfoProvider = ({children}) => {
     const [userInfo, setUserInfo] = useState(initValues);
 
     const applyUserInfo = (data) => {
-        console.log("Apply context: ", data);
-        
         setUserInfo({
             ...userInfo,  // Kết hợp giá trị cũ với giá trị mới
             ...data,      // Ghi đè với các giá trị mới từ `data`

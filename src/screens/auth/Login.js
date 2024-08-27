@@ -9,6 +9,7 @@ import { getData, saveData, deleteData } from "../../config/SecureStorage";
 import CustomInput from "../../components/common/CustomInput";
 import { UserInfoContext } from "../../context/UserInfoContext";
 import { ThemeContext } from "../../context/ThemeContext";
+import envConfig from "../../config/EnvConfig";
 
 const Login = ({navigation}) => {
     const { themeColors } = useContext(ThemeContext);
@@ -40,7 +41,7 @@ const Login = ({navigation}) => {
         try {
             const response = await axiosInstance
                 .post(
-                    "/login", 
+                    "/mobile/login", 
                     {
                         username: data.username,
                         password: data.password,
@@ -55,8 +56,14 @@ const Login = ({navigation}) => {
                 // Lưu dữ liệu vào SecureStorage
                 await saveData("login-token", response.data.access_token);
 
-                // // Lưu thông tin tài khoản vào UserInfoContext
-                applyUserInfo(response.data.info[0]);
+                // Lưu thông tin tài khoản vào UserInfoContext
+                const userInfo = {...response.data.info[0]};
+                
+                userInfo.avatar = envConfig.URL_LOAD_AVATAR_FROM_LOCAL + userInfo.avatar;
+                
+                // userInfo.avatar = envConfig.URL_LOAD_AVATAR_FROM_SERVER + userInfo.avatar;
+
+                applyUserInfo(userInfo);
 
                 // Chuyển hướng
                 navigation.navigate("home");

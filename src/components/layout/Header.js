@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { View, StyleSheet, Image } from "react-native";
 import { Text } from '@rneui/themed';
-import userAvatar from "../../assets/images/avatar-2.jpg";
+import { UserInfoContext } from "../../context/UserInfoContext";
+import ImagePickerComponent from "../specific/ImagePickerComponent";
 
 const Header = ({title_1, title_2, themeColors}) => {
     const navigation = useNavigation();
+    const { userInfo } = useContext(UserInfoContext);
 
     return (
         <TouchableOpacity style={[styles.container, {backgroundColor: themeColors.secondaryBackgroundColor}]} onPress={() => navigation.navigate("userinfo")}>
@@ -15,7 +17,12 @@ const Header = ({title_1, title_2, themeColors}) => {
                 <Text style={[styles.text, {color: themeColors.textColor, fontWeight: "bold"}]}>{title_2}</Text>
             </View>
             <View style={styles.rightHalf}>
-                <Image source={userAvatar} style={[styles.avatar, {borderColor: themeColors.borderColorLight}]}/>
+                <ImagePickerComponent
+                    currentImageUri={userInfo.avatar}
+                    onImagePicked={() => {}}
+                    otherStyles={[styles.avatar, {borderColor: themeColors.borderColorLight}]}
+                    acceptPicker={false}
+                />
             </View>
         </TouchableOpacity>
     )

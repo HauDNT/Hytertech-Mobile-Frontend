@@ -10,7 +10,7 @@ const lightTheme = {
     iconColor: "#000000",
     iconActive: "#7EA1FF",
     whiteColor: "#FFFFFF",
-    headerColor: "#7695FF",
+    headerColor: "#A2CA71",
 };
 
 const darkTheme = {

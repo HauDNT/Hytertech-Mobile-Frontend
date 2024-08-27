@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { Modal, Text, TouchableOpacity, View, Image, StyleSheet } from 'react-native';
 import modalIconDefault from "../../../assets/icons/modal-default-icon.png";
 
-const Modal2 = ({visible, onRequestClose, title, content, icon = modalIconDefault, handleAction = () => {}}) => {
+const ModalImagePicker = ({
+    visible, 
+    onRequestClose, 
+    title, 
+    content, 
+    icon = modalIconDefault, 
+    handleOpenCamera = () => {},
+    handleOpenLibrary = () => {},
+}) => {
     return (
         <Modal
             animationType="fade"
@@ -27,16 +35,22 @@ const Modal2 = ({visible, onRequestClose, title, content, icon = modalIconDefaul
 
                     <View style={styles.btnContainer}>
                         <TouchableOpacity
+                            style={[styles.button, styles.buttonAction]}
+                            onPress={handleOpenCamera}
+                        >
+                            <Text style={styles.textStyle}>Máy ảnh</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.button, styles.buttonAction]}
+                            onPress={handleOpenLibrary}
+                        >
+                            <Text style={styles.textStyle}>Thư viện</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
                             style={[styles.button, styles.buttonClose]}
                             onPress={onRequestClose}
                         >
                             <Text style={styles.textStyle}>Đóng</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.button, styles.buttonAction]}
-                            onPress={handleAction}
-                        >
-                            <Text style={styles.textStyle}>Đồng ý</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -53,7 +67,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalView: {
-        width: "80%",
+        width: "95%",
         backgroundColor: 'white',
         borderRadius: 10,
         padding: 20,
@@ -92,6 +106,7 @@ const styles = StyleSheet.create({
     button: {
         width: 100,
         padding: 10,
+        marginHorizontal: 10,
         borderRadius: 20,
         elevation: 3,
     },
@@ -121,9 +136,9 @@ const styles = StyleSheet.create({
     content: {
         fontSize: 15,
         lineHeight: 20,
-        textAlign: "justify",
+        textAlign: "center",
         overflow: "scroll",
     }
 });
 
-export default Modal2;
+export default ModalImagePicker;

@@ -46,9 +46,9 @@ function NavigationWithTheme() {
         },
         headerTintColor: '#000',
         headerTitleStyle: {
-            color: themeColors.textColor,
+            color: "#FFFFFF",
             fontWeight: 'bold',
-            fontSize: 18,
+            fontSize: 20,
         },
     };
 

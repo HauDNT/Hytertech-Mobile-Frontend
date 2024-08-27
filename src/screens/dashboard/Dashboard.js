@@ -22,7 +22,7 @@ const Dashboard = ({themeColors}) => {
     useEffect(() => {
         setLoading(true);
         setTimeout(() => setLoading(false), 2000);
-    }, []);
+    }, [userInfo]);
 
     const textCards = [
         "Trạm",

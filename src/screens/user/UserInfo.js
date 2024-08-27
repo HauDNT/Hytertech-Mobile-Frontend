@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Button, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -12,10 +12,9 @@ import CustomCombobox from "../../components/common/CustomCombobox";
 import { formatAndDisplayDatetime } from "../../utils/FormatDateTime";
 import { deleteData } from "../../config/SecureStorage";
 import Modal2 from "../../components/common/Modals/Modal2";
-
+import ImagePickerComponent from '../../components/specific/ImagePickerComponent';
 import { ThemeContext } from "../../context/ThemeContext";
 import { UserInfoContext } from "../../context/UserInfoContext";
-import userAvatar from "../../assets/images/avatar.jpg";
 import axiosInstance from '../../config/axiosInstance';
 
 const UserInfo = () => {
@@ -29,6 +28,7 @@ const UserInfo = () => {
         districts: [],
         wards: [],
         modalVisible: false,
+        imageUri: userInfo.avatar,
     });
 
     const updateData = (key, value) => {
@@ -39,6 +39,7 @@ const UserInfo = () => {
     };
 
     const initValues = {
+        avatar: userInfo.avatar,
         email: userInfo.email,
         full_name: userInfo.full_name,
         tel: userInfo.tel,
@@ -61,17 +62,17 @@ const UserInfo = () => {
     });
 
     const getCities = async () => {
-        const response = await axiosInstance.get("/cities");
+        const response = await axiosInstance.get("/mobile/cities");
         updateData("cities", response.data.data);
     };
 
     const getDistricts = async (cityId) => {
-        const response = await axiosInstance.get(`/districts/${cityId}`);
+        const response = await axiosInstance.get(`/mobile/districts/${cityId}`);
         updateData("districts", response.data.data);
     };
 
     const getWards = async (districtId) => {
-        const response = await axiosInstance.get(`/wards/${districtId}`);
+        const response = await axiosInstance.get(`/mobile/wards/${districtId}`);
         updateData("wards", response.data.data);
     };
 
@@ -91,8 +92,8 @@ const UserInfo = () => {
 
     const handleUpdate = async (data) => {
         try {
-            const response = await axiosInstance.put(`/users/update/${userInfo.id}`, data);
-            
+            await axiosInstance.put(`/mobile/update/${userInfo.id}`, data);
+
             Toast.show({
                 type: 'success',
                 text1: 'Cập nhật thông tin mới thành công!',
@@ -116,6 +117,43 @@ const UserInfo = () => {
         navigation.navigate("login");
     };
 
+    const handleUpdateAvatar = (imageUri) => {
+        uploadAvatar(imageUri);
+        applyUserInfo({avatar: imageUri});
+    };
+
+    const uploadAvatar = async (avatarUri) => {
+        const formData = new FormData();
+        const dateTime = new Date();
+
+        formData.append("avatar", {
+            uri: avatarUri,
+            name: `avatar_${dateTime}_${userInfo.id}`,
+            type: 'image/jpg',
+        });
+        
+        try {
+            const response = await axiosInstance.post(
+                `/mobile/update/avatar/${userInfo.id}`, 
+                formData, 
+                {
+                    headers: {'Content-Type': 'multipart/form-data'}
+                }
+            );
+
+            Toast.show({
+                type: "success",
+                text1: "Đổi ảnh đại diện thành công!",
+            });
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Đổi ảnh đại diện thất bại",
+                text2: "Vui lòng thử lại sau",
+            });
+        };
+    };
+
     useEffect(() => {
         getCities();
         getDistricts(initValues.city_id);
@@ -124,7 +162,7 @@ const UserInfo = () => {
         setTimeout(() => {
             updateData("isLoading", false);
         }, 2000);
-    }, []);
+    }, [userInfo]);
 
     return (
         data.isLoading ?
@@ -134,12 +172,11 @@ const UserInfo = () => {
             <Layout>
                 <View style={[styles.container, {backgroundColor: themeColors.primaryBackgroundColor, borderColor: themeColors.borderColorLight}]}>
                     <View style={styles.contentWrap}>
-                        <TouchableOpacity>
-                            <Image 
-                                source={userAvatar}
-                                style={styles.image}    
-                            />
-                        </TouchableOpacity>
+                        <ImagePickerComponent
+                            currentImageUri={data.imageUri}
+                            onImagePicked={handleUpdateAvatar}
+                            acceptPicker={true}
+                        />
                     </View>
 
                     <Divider/>
@@ -191,6 +228,12 @@ const UserInfo = () => {
 
 
                                         <Text style={[styles.subHeader, {color: themeColors.textColor}]}>Địa chỉ</Text>
+                                        <CustomInput 
+                                            label={"Địa chỉ"}
+                                            handleChange={handleChange('address')}
+                                            handleBlur={handleBlur('address')}
+                                            value={values.address}
+                                        />
                                         <CustomCombobox 
                                             label={"Tỉnh / Thành phố"}
                                             title={"Chọn"}
