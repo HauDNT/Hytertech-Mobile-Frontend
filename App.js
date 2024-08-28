@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { LogBox } from "react-native";
 import Toast from "react-native-toast-message";
 import { configToast } from "./src/components/presentation/CustomToast";
@@ -18,14 +18,14 @@ import Rating from "./src/screens/rating/Rating";
 import UserInfo from "./src/screens/user/UserInfo";
 import Notification from "./src/screens/notification/Notification";
 import Settings from "./src/screens/settings/Settings";
-import A from "./src/assets/images/favicon.png"
+
 // Context API
 import { UserInfoProvider } from "./src/context/UserInfoContext";
 import { ThemeProvider, ThemeContext } from "./src/context/ThemeContext";
 
 // LogBox.ignoreAllLogs(true); // Vô hiệu hóa tất cả cảnh báo
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
     return (
