@@ -35,6 +35,7 @@ const ImagePickerComponent = ({ currentImageUri, onImagePicked, otherStyles, opt
         if (!result.canceled) {
             updateData("imageUri", result.assets[0].uri);
             onImagePicked(result.assets[0].uri);
+            updateData("modalVisible", false);
         };
     };
 
@@ -56,6 +57,7 @@ const ImagePickerComponent = ({ currentImageUri, onImagePicked, otherStyles, opt
         if (!result.canceled) {
             updateData("imageUri", result.assets[0].uri);
             onImagePicked(result.assets[0].uri);
+            updateData("modalVisible", false);
         };
     };
 

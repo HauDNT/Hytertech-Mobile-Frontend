@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import * as Yup from 'yup';
-import { Formik } from 'formik';
+import * as Yup from "yup";
+import { Formik } from "formik";
 import Toast from "react-native-toast-message";
 import AppLoading from "../../components/common/AppLoading";
 import Layout from "../../components/layout/Layout";
@@ -12,10 +12,10 @@ import CustomCombobox from "../../components/common/CustomCombobox";
 import { formatAndDisplayDatetime } from "../../utils/FormatDateTime";
 import { deleteData } from "../../config/SecureStorage";
 import Modal2 from "../../components/common/Modals/Modal2";
-import ImagePickerComponent from '../../components/specific/ImagePickerComponent';
+import ImagePickerComponent from "../../components/specific/ImagePickerComponent";
 import { ThemeContext } from "../../context/ThemeContext";
 import { UserInfoContext } from "../../context/UserInfoContext";
-import axiosInstance from '../../config/axiosInstance';
+import axiosInstance from "../../config/axiosInstance";
 
 const UserInfo = () => {
     const navigation = useNavigation();
@@ -117,12 +117,7 @@ const UserInfo = () => {
         navigation.navigate("login");
     };
 
-    const handleUpdateAvatar = (imageUri) => {
-        uploadAvatar(imageUri);
-        applyUserInfo({avatar: imageUri});
-    };
-
-    const uploadAvatar = async (avatarUri) => {
+    const handleUpdateAvatar = async (avatarUri) => {
         const formData = new FormData();
         const dateTime = new Date();
 
@@ -133,13 +128,15 @@ const UserInfo = () => {
         });
         
         try {
-            const response = await axiosInstance.post(
-                `/mobile/update/avatar/${userInfo.id}`, 
-                formData, 
-                {
-                    headers: {'Content-Type': 'multipart/form-data'}
-                }
-            );
+            await axiosInstance
+                .post(
+                    `/mobile/update/avatar/${userInfo.id}`, 
+                    formData, 
+                    {
+                        headers: {'Content-Type': 'multipart/form-data'}
+                    }
+                )
+                .then(() => applyUserInfo({avatar: data.imageUri}));
 
             Toast.show({
                 type: "success",

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import {Text} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import axiosInstance from "../../config/axiosInstance";
 import AppLoading from "../../components/common/AppLoading";
@@ -18,7 +19,7 @@ const Stations = () => {
     };
 
     const getStationBasicInfoList = async () => {
-        const response = (await axiosInstance.get(`/stations/user/${userInfo.id}`)).data;
+        const response = (await axiosInstance.get(`/mobile/stations/${userInfo.id}`)).data.data;
 
         response.map(item => item.created_at = formatAndDisplayDate(item.created_at));
 
@@ -26,7 +27,9 @@ const Stations = () => {
     };
 
     useEffect(() => {
-        getStationBasicInfoList().then(result => setStationList(result));
+        getStationBasicInfoList().then(result => {
+            setStationList(result);
+        });
 
         setTimeout(() => {
             setIsLoading(false);
@@ -39,17 +42,26 @@ const Stations = () => {
         :
         (
             <Layout>
-                <FlatlistVertical 
-                    data={stationList} 
-                    noteFields={["Số hiệu: ", "Ngày lắp đặt: "]}
-                    fields={[
-                        "id",
-                        "name",
-                        "image",
-                        "created_at",
-                    ]}
-                    onItemPress={handlePressStationItem}
-                />
+                {
+                    stationList?.length > 0 ?
+                    (
+                        <FlatlistVertical 
+                            data={stationList} 
+                            noteFields={["Số hiệu: ", "Ngày lắp đặt: "]}
+                            fields={[
+                                "id",
+                                "name",
+                                "image",
+                                "created_at",
+                            ]}
+                            onItemPress={handlePressStationItem}
+                        />
+                    )
+                    :
+                    (
+                        <Text>Không có giàn nào được đăng ký!</Text>
+                    )
+                }
             </Layout>
         )
     );
