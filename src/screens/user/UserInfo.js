@@ -128,20 +128,24 @@ const UserInfo = () => {
         });
         
         try {
-            await axiosInstance
+            const response = await axiosInstance
                 .post(
-                    `/mobile/update/avatar/${userInfo.id}`, 
+                    `/mobile/update/av1atar/${userInfo.id}`, 
                     formData, 
                     {
                         headers: {'Content-Type': 'multipart/form-data'}
                     }
-                )
-                .then(() => applyUserInfo({avatar: data.imageUri}));
+                );
 
-            Toast.show({
-                type: "success",
-                text1: "Đổi ảnh đại diện thành công!",
-            });
+            if (response.data.status === 200) {
+                updateData("imageUri", avatarUri);
+                applyUserInfo({avatar: avatarUri});
+
+                Toast.show({
+                    type: "success",
+                    text1: "Đổi ảnh đại diện thành công!",
+                });
+            }
         } catch (error) {
             Toast.show({
                 type: "error",
@@ -167,7 +171,7 @@ const UserInfo = () => {
         :
         (
             <Layout>
-                <View style={[styles.container, {backgroundColor: themeColors.primaryBackgroundColor, borderColor: themeColors.borderColorLight}]}>
+                <View style={[styles.container, {backgroundColor: themeColors.secondaryBackgroundColor, borderColor: themeColors.borderColorLight}]}>
                     <View style={styles.contentWrap}>
                         <ImagePickerComponent
                             currentImageUri={data.imageUri}

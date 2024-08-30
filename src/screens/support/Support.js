@@ -1,11 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
 import Layout from "../../components/layout/Layout";
+import EmptyData from "../../components/common/EmptyData";
 
 const Support = () => {
     return (
         <Layout>
-            <Text>Support</Text>
+            <EmptyData/>
         </Layout>
     );
 };

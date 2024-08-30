@@ -59,8 +59,11 @@ function NavigationWithTheme() {
                     <Stack.Screen name="login" component={Login} options={{
                         headerShown: false,
                     }}/>
-                    <Stack.Screen name="home" component={Home} options={{ title: "Trang chủ", headerLeft: () => null, }}/>
-                    <Stack.Screen name="stations" component={Stations} options={{ title: "Quản lý giàn" }}/>
+                    <Stack.Screen name="home" component={Home} options={{ 
+                        title: "Trang chủ", 
+                        headerLeft: () => null,
+                    }}/>
+                    <Stack.Screen name="stations" component={Stations} options={{ title: "Quản lý giàn", }}/>
                     <Stack.Screen name="stationdetails" component={StationDetails} options={{ title: "Thông tin chi tiết" }}/>
                     <Stack.Screen name="sensors" component={Sensors} options={{ title: "Quản lý cảm biến" }}/>
                     <Stack.Screen name="sensordetails" component={SensorDetails} options={{ title: "Thông tin chi tiết" }}/>

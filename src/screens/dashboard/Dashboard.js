@@ -21,7 +21,7 @@ const Dashboard = ({themeColors}) => {
 
     useEffect(() => {
         setLoading(true);
-        setTimeout(() => setLoading(false), 2000);
+        setTimeout(() => setLoading(false), 2500);
     }, [userInfo]);
 
     const textCards = [

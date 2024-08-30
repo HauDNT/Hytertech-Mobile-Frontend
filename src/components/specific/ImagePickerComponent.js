@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import ModalImagePicker from "../common/Modals/ModalImagePicker";
@@ -33,9 +33,9 @@ const ImagePickerComponent = ({ currentImageUri, onImagePicked, otherStyles, opt
         });
 
         if (!result.canceled) {
-            updateData("imageUri", result.assets[0].uri);
-            onImagePicked(result.assets[0].uri);
             updateData("modalVisible", false);
+            onImagePicked(result.assets[0].uri);
+            updateData("imageUri", result.assets[0].uri);
         };
     };
 
@@ -55,9 +55,9 @@ const ImagePickerComponent = ({ currentImageUri, onImagePicked, otherStyles, opt
         });
 
         if (!result.canceled) {
-            updateData("imageUri", result.assets[0].uri);
-            onImagePicked(result.assets[0].uri);
             updateData("modalVisible", false);
+            onImagePicked(result.assets[0].uri);
+            updateData("imageUri", result.assets[0].uri);
         };
     };
 

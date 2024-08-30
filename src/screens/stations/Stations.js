@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import axiosInstance from "../../config/axiosInstance";
 import AppLoading from "../../components/common/AppLoading";
 import Layout from "../../components/layout/Layout";
+import EmptyData from "../../components/common/EmptyData";
 import FlatlistVertical from "../../components/layout/FlatlistVertical";
 import { formatAndDisplayDate } from "../../utils/FormatDate";
 import { UserInfoContext } from "../../context/UserInfoContext";
@@ -59,7 +60,7 @@ const Stations = () => {
                     )
                     :
                     (
-                        <Text>Không có giàn nào được đăng ký!</Text>
+                        <EmptyData message="Không có giàn nào được đăng ký!"/>
                     )
                 }
             </Layout>

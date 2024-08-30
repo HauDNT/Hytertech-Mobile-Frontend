@@ -59,8 +59,8 @@ const Login = ({navigation}) => {
                 // Lưu thông tin tài khoản vào UserInfoContext
                 const userInfo = {...response.data.info[0]};
 
-                userInfo.avatar = envConfig.URL_LOAD_IMG_FROM_LOCAL + userInfo.avatar
-                // userInfo.avatar = envConfig.URL_LOAD_IMG_FROM_SERVER + userInfo.avatar
+                // userInfo.avatar = envConfig.URL_LOAD_IMG_FROM_LOCAL + userInfo.avatar
+                userInfo.avatar = envConfig.URL_LOAD_IMG_FROM_SERVER + userInfo.avatar
 
                 applyUserInfo(userInfo);
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet, } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import Toast from "react-native-toast-message";
@@ -10,7 +10,9 @@ import { formatAndDisplayDate } from "../../utils/FormatDate";
 import FlatlistVertical from "../../components/layout/FlatlistVertical";
 import { RoundToDecimalPlace } from "../../utils/RoundToDecimalPlace";
 import { formatAndDisplayDatetime } from "../../utils/FormatDateTime";
+import { ThemeContext } from "../../context/ThemeContext";
 import AppLoading from "../../components/common/AppLoading";
+import EmptyData from "../../components/common/EmptyData";
 
 // Icons
 import TempIcon from "../../assets/icons/temp-icon.jpg";
@@ -21,14 +23,12 @@ import ECIcon from "../../assets/icons/ec-icon.webp";
 const StationDetails = ({ route }) => {
     const navigation = useNavigation();
     const stationId = +route.params.id;
+    const { themeColors } = useContext(ThemeContext);
 
     const [data, setData] = useState({
         isLoading: true,
-        stationDetails: {},
-        tempData: {},
-        // humidData: {},
-        phData: {},
-        ecData: {},
+        stationInfo: {},
+        listSensors: [],
     });
 
     const updateData = (key, value) => {
@@ -45,16 +45,12 @@ const StationDetails = ({ route }) => {
     useEffect(() => {
         Promise
             .all([
-                axiosInstance.get(`/stations/${stationId}`),
-                axiosInstance.get(`/sensors/param?measureId=1&stationId=${stationId}`),
-                axiosInstance.get(`/sensors/param?measureId=2&stationId=${stationId}`),
-                axiosInstance.get(`/sensors/param?measureId=3&stationId=${stationId}`),
+                axiosInstance.get(`/mobile/stations/info/${stationId}`),
+                axiosInstance.get(`/mobile/sensors?station_id=${stationId}`),
             ])
-            .then(([stationDetailsRes, tempRes, phRes, ecRes]) => {
-                updateData("stationDetails", stationDetailsRes.data);
-                updateData("tempData", tempRes.data);
-                updateData("phData", phRes.data);
-                updateData("ecData", ecRes.data);
+            .then(([stationInfoRes, listSensorsRes]) => {
+                updateData("stationInfo", stationInfoRes.data.data);
+                updateData("listSensors", listSensorsRes.data.data);
 
                 setTimeout(() => {
                     updateData("isLoading", false);
@@ -69,21 +65,22 @@ const StationDetails = ({ route }) => {
         :
         (
             <Layout>
-                <View style={styles.container}>
+                <View style={[styles.container, {backgroundColor: themeColors.secondaryBackgroundColor, borderColor: themeColors.borderColorLight}]}>
                     <View style={styles.contentWrap}>
-                        <TouchableOpacity onPress={() => alert("Change station image here!")}>
+                        <TouchableOpacity disabled={true}>
                             <Image 
-                                source={{ uri: "https://skyfarm.vn/uploads/Thuy-canh/gian-thuy-canh/gian-thuy-canh-bac-thang-gls06.jpg"}}
+                                source={{ uri: data.stationInfo.image}}
                                 style={styles.image}    
                             />
                         </TouchableOpacity>
-                        <Text style={styles.header}>Giàn: {data.stationDetails?.name}</Text>
-                        <Text style={styles.subTitle}>Ngày lắp đặt: {formatAndDisplayDate(data.stationDetails?.created_at)}</Text>
+                        <Text style={[styles.header, {color: themeColors.textColor}]}>{data.stationInfo.name}</Text>
+                        <Text style={[styles.category, {color: themeColors.textColor}]}>{data.stationInfo.category_name}</Text>
+                        <Text style={[styles.subTitle, {color: themeColors.textColor}]}>Ngày lắp đặt: {formatAndDisplayDate(data.stationInfo.created_at)}</Text>
                     </View>
 
                     <Divider/>
 
-                    <View style={[styles.contentWrap, {alignItems: "flex-start"}]}>
+                    {/* <View style={[styles.contentWrap, {alignItems: "flex-start"}]}>
                         <Text style={styles.subHeader}>Thông số đo đạc hiện tại</Text>
 
                         <View style={styles.cardParams}>
@@ -132,23 +129,32 @@ const StationDetails = ({ route }) => {
                         </View>
                     </View>
 
-                    <Divider/>
+                    <Divider/> */}
 
                     <View>
-                        <Text style={[styles.subHeader, {marginTop: 15}]}>Thiết bị được lắp đặt</Text>
-
-                        <FlatlistVertical 
-                            data={
-                                data.stationDetails?.station_sensors?.map(item => ({
-                                    id: item.sensor.id,
-                                    name: item.sensor.name,
-                                    created_at: formatAndDisplayDate(item.sensor.created_at),
-                                }))
-                            }
-                            noteFields={["", "Ngày lắp đặt: "]}
-                            fields={['id', 'name', 'image', 'created_at']} 
-                            onItemPress={handlePressSensorItem}
-                        />
+                        <Text style={[styles.subHeader, {marginTop: 15, color: themeColors.textColor}]}>Thiết bị được lắp đặt</Text>
+                        {
+                            data.listSensors.length > 0 ?
+                            (
+                                <FlatlistVertical 
+                                    data={
+                                        data.listSensors.map(item => ({
+                                            id: item.id,
+                                            name: item.name,
+                                            image: item.image,
+                                            created_at: formatAndDisplayDate(item.created_at),
+                                        }))
+                                    }
+                                    noteFields={["", "Ngày lắp đặt: "]}
+                                    fields={['id', 'name', 'image', 'created_at']} 
+                                    onItemPress={handlePressSensorItem}
+                                />
+                            )
+                            :
+                            (
+                                <EmptyData/>
+                            )
+                        }
                     </View>
                 </View>
             </Layout>
@@ -163,8 +169,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: "#ddd",
-        backgroundColor: "white",
         elevation: 2,
     },
     contentWrap: {
@@ -189,6 +193,10 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 5,
     },
+    category: {
+        fontSize: 16,
+        marginVertical: 5,
+    },
     image: {
         width: 180,
         height: 180,
@@ -201,7 +209,7 @@ const styles = StyleSheet.create({
         height: 150,
         width: "100%",
         marginBottom: 7,
-    }
+    },
 });
 
 export default StationDetails;

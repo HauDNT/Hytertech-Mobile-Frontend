@@ -23,13 +23,13 @@ const StatisticalDetails = ({ route }) => {
         <Layout>
             <View style={styles.container}>
                 <CustomCombobox
-                    label={"Chọn giàn"}
-                    title={"Chọn giàn"}
+                    label={"Chọn cảm biến"}
+                    title={"Chọn cảm biến"}
                     data={
                         [
-                            { label: 'Giàn số 1', value: 1 },
-                            { label: 'Giàn số 2', value: 2 },
-                            { label: 'Giàn số 3', value: 3 },
+                            { label: 'Cảm biến số 1', value: 1 },
+                            { label: 'Cảm biến số 2', value: 2 },
+                            { label: 'Cảm biến số 3', value: 3 },
                         ]
                     }
                 />
