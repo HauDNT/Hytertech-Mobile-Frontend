@@ -8,12 +8,14 @@ import axiosInstance from "../../config/axiosInstance";
 import { getData, saveData, deleteData } from "../../config/SecureStorage";
 import CustomInput from "../../components/common/CustomInput";
 import { UserInfoContext } from "../../context/UserInfoContext";
+import { StationsContext } from "../../context/StationsContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import envConfig from "../../config/EnvConfig";
 
 const Login = ({navigation}) => {
     const { themeColors } = useContext(ThemeContext);
     const { applyUserInfo } = useContext(UserInfoContext);
+    const { getNewStationsContextData } = useContext(StationsContext);
 
     const initvalues = {
         username: "tienhau.it@gmail.com",
@@ -59,10 +61,13 @@ const Login = ({navigation}) => {
                 // Lưu thông tin tài khoản vào UserInfoContext
                 const userInfo = {...response.data.info[0]};
 
-                // userInfo.avatar = envConfig.URL_LOAD_IMG_FROM_LOCAL + userInfo.avatar
-                userInfo.avatar = envConfig.URL_LOAD_IMG_FROM_SERVER + userInfo.avatar
+                userInfo.avatar = envConfig.URL_LOAD_IMG_FROM_LOCAL + userInfo.avatar
+                // userInfo.avatar = envConfig.URL_LOAD_IMG_FROM_SERVER + userInfo.avatar
 
                 applyUserInfo(userInfo);
+
+                // Gọi context API lấy danh sách trạm của người dùng:
+                await getNewStationsContextData(userInfo.id);
 
                 // Chuyển hướng
                 navigation.navigate("home");

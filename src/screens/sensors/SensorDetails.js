@@ -7,26 +7,23 @@ import Layout from "../../components/layout/Layout";
 import Divider from "../../components/common/Divider";
 import CustomInput from "../../components/common/CustomInput";
 import CustomCombobox from "../../components/common/CustomCombobox";
-// import CustomTable from '../../components/layout/CustomTable';
-
 import FlatlistHorizontal from '../../components/layout/FlatlistHorizontal';
-
 import axiosInstance from '../../config/axiosInstance';
 import { formatAndDisplayDate } from "../../utils/FormatDate";
-
-import { UserInfoContext } from "../../context/UserInfoContext";
+import { ThemeContext } from "../../context/ThemeContext";
+import { StationsContext } from "../../context/StationsContext";
 import AppLoading from '../../components/common/AppLoading';
 
 const SensorDetails = ({ route }) => {
     const sensorId = route.params.id;
-    const { userInfo } = useContext(UserInfoContext);
+    const { themeColors } = useContext(ThemeContext);
+    const { listStations } = useContext(StationsContext);
 
     const [data, setData] = useState({
         isLoading: true,
         isEnabled: false,
         acceptToggle: true,
         sensorData: {},
-        listStationNames: [],
     });
 
     const updateData = (key, value) => {
@@ -38,7 +35,7 @@ const SensorDetails = ({ route }) => {
 
     const initValues = {
         sensorName: data.sensorData ? data.sensorData.name : "",
-        sensorDetail: 'Chưa có',
+        sensorDetail: data.sensorData ? data.sensorData.description : "",
         sensorStation: data.sensorData ? data.sensorData.station_id : 0,
     };
 
@@ -48,40 +45,41 @@ const SensorDetails = ({ route }) => {
         sensorStation: Yup.number().required('Bắt buộc'),
     });
 
-    const updateSensorState = async (sensorState) => {
+    const updateSensorState = async () => {
         try {
             if (data.acceptToggle) {
-                const res = await axiosInstance.put(`sensors/status/${sensorId}`, { status: sensorState });
+                const newSensorState = data.sensorData.status === 1 ? 0 : 1;
+                const res = await axiosInstance.put(`/mobile/sensors/status/${sensorId}`, {status: newSensorState});
                 
-                if (res.data === true) {
+                if (res.data.data === true) {
                     updateData("acceptToggle", false);
     
                     setData(prevData => ({
                         ...prevData,
                         sensorData: {
                             ...prevData.sensorData,
-                            status: sensorState,
+                            status: newSensorState,
                         }
                     }));
-            
-                    if (sensorState) {
+
+                    if (newSensorState) {
                         Toast.show({
                             type: 'success',
-                            text1: 'Đã bật động cơ',
+                            text1: 'Đã bật thiết bị',
                         });
                     } else {
                         Toast.show({
                             type: 'error',
-                            text1: 'Đã tắt động cơ',
+                            text1: 'Đã tắt thiết bị',
                         });
                     };
 
-                    setTimeout(() => updateData("acceptToggle", true), 3000);
+                    setTimeout(() => updateData("acceptToggle", true), 5000);
                 }
                 else {
                     Toast.show({
                         type: 'error',
-                        text1: 'Đã xảy ra lỗi khi bật/tắt động cơ',
+                        text1: 'Đã xảy ra lỗi khi bật/tắt thiết bị',
                     });
                 };
             }
@@ -89,7 +87,7 @@ const SensorDetails = ({ route }) => {
         } catch (error) {
             Toast.show({
                 type: 'error',
-                text1: 'Đã xảy ra lỗi khi bật/tắt động cơ',
+                text1: 'Đã xảy ra lỗi khi bật/tắt thiết bị',
             });
         }
     };
@@ -97,12 +95,10 @@ const SensorDetails = ({ route }) => {
     useEffect(() => {
         Promise
             .all([
-                axiosInstance.get(`/stations?userId=${userInfo.id}`),
-                axiosInstance.get(`sensors/info/${sensorId}`),
+                axiosInstance.get(`/mobile/sensors/info/${sensorId}`),
             ])
-            .then(([stationListRes, sensorDataRes]) => {
-                updateData("listStationNames", stationListRes.data);
-                updateData("sensorData", sensorDataRes.data);
+            .then(([sensorDataRes]) => {
+                updateData("sensorData", sensorDataRes.data.data);
 
                 setTimeout(() => {
                     updateData("isLoading", false);
@@ -110,6 +106,7 @@ const SensorDetails = ({ route }) => {
             })
             .catch(error => {
                 console.log(error);
+                
                 Toast.show({
                     type: 'error',
                     text1: 'Lỗi khi tải dữ liệu từ máy chủ.',
@@ -126,46 +123,41 @@ const SensorDetails = ({ route }) => {
         (
             <>
                 <Layout>
-                    <View style={styles.container}>
-                        <View style={styles.contentWrap}>
-                            <TouchableOpacity onPress={() => alert("Change sensor image here!")}>
+                    <View style={[styles.container, {backgroundColor: themeColors.secondaryBackgroundColor, borderColor: themeColors.borderColorLight}]}>
+                        <View style={[styles.contentWrap, {backgroundColor: themeColors.secondaryBackgroundColor}]}>
+                            <TouchableOpacity disabled={true}>
                                 <Image 
-                                    source={{ uri: "https://product.hstatic.net/1000069225/product/_bien_muc_chat_long_khong_tiep_xuc_y25_non-contact_liquid_level_sensor_5c00dbb0e3f9492db20e677582a25f63_1024x1024.jpg"}}
-                                    style={styles.image}    
+                                    source={{ uri: data.sensorData.image}}
+                                    style={[styles.image, {borderColor: themeColors.borderColorLight}]}    
                                 />
                             </TouchableOpacity>
-                            <Text style={styles.header}>{data?.sensorData?.name}</Text>
-                            <Text style={styles.subTitle}>Ngày lắp đặt: {formatAndDisplayDate(data?.sensorData?.created_at)}</Text>
+                            <Text style={[styles.header, {color: themeColors.textColor}]}>{data.sensorData.name}</Text>
+                            <Text style={[styles.subTitle, {color: themeColors.textColor}]}>Ngày lắp đặt: {formatAndDisplayDate(data.sensorData.created_at)}</Text>
                         </View>
 
                         <Divider/>
 
                         <View style={styles.contentWrap}>
                             <TouchableOpacity 
-                                onPress={() => updateSensorState(!data.sensorData.status)}
-                                style={[data.sensorData.status ? styles.buttonOn : styles.buttonOff, styles.button]}
+                                onPress={() => updateSensorState()}
+                                style={[data.sensorData.status === 1 ? {backgroundColor: themeColors.greenColor} : {backgroundColor: themeColors.redColor}, styles.button]}
                             >
-                                <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>{data?.sensorData?.status ? "Bật" : "Tắt"}</Text>
+                                <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>{data.sensorData.status === 1 ? "Tắt" : "Bật"}</Text>
                             </TouchableOpacity>
                         </View>
 
                         <Divider/>
 
                         <View style={styles.contentWrap}>
-                            <Text style={styles.subHeader}>Lịch sử đo đạc</Text>
+                            <Text style={[styles.subHeader, {color: themeColors.textColor}]}>Lịch sử đo đạc</Text>
                             
-
-                            {/* <CustomTable/> */}
                             <FlatlistHorizontal/>
-
-
-
                         </View>
 
                         <Divider/>
 
                         <View style={styles.contentWrap}>
-                            <Text style={styles.subHeader}>Thông tin cơ bản</Text>
+                            <Text style={[styles.subHeader, {color: themeColors.textColor}]}>Thông tin cơ bản</Text>
                             <View style={styles.form}>
                             {
                                 !data.isLoading && (
@@ -197,8 +189,9 @@ const SensorDetails = ({ route }) => {
                                             <CustomCombobox 
                                                 label={"Vị trí lắp đặt"}
                                                 title={"Chọn giàn"}
-                                                data={data?.listStationNames?.length > 0 ? 
-                                                    data.listStationNames.map(station => ({
+                                                data={
+                                                    listStations.length > 0 ? 
+                                                    listStations.map(station => ({
                                                         label: station.name, 
                                                         value: station.id,
                                                     })) : []
@@ -231,8 +224,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: "#ddd",
-        backgroundColor: "white",
+        overflow: "hidden",
         elevation: 2,
     },
     contentWrap: {
@@ -262,7 +254,6 @@ const styles = StyleSheet.create({
     image: {
         width: 180,
         height: 180,
-        borderColor: "#ccc",
         borderWidth: 1,
         borderRadius: 100,
         marginBottom: 5,
@@ -276,7 +267,6 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        borderColor: "#ddd",
         borderWidth: 0.5,
         borderRadius: 5,
     },
@@ -285,8 +275,7 @@ const styles = StyleSheet.create({
         height: 120,
         marginVertical: 10,
         borderRadius: 100,
-        borderColor: "#ddd",
-        borderWidth: 3,
+        borderWidth: 1,
         alignItems: "center",
         justifyContent: "center",
     },

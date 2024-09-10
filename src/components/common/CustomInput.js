@@ -16,7 +16,7 @@ const CustomInput = ({label, handleBlur, handleChange, value, enableEdit = true,
                 style={[
                     styles.input, 
                     !enableEdit && !themeColors == "dark" && {backgroundColor: "#eee"}, 
-                    hardColor ? {color: hardColor} : {color: themeColors.textColor}
+                    hardColor ? {color: hardColor} : {color: themeColors.textColor, backgroundColor: themeColors.inputBoxColor}
                 ]}
                 editable={enableEdit}
                 keyboardType={keyboardType}

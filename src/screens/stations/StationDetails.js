@@ -74,7 +74,7 @@ const StationDetails = ({ route }) => {
                             />
                         </TouchableOpacity>
                         <Text style={[styles.header, {color: themeColors.textColor}]}>{data.stationInfo.name}</Text>
-                        <Text style={[styles.category, {color: themeColors.textColor}]}>{data.stationInfo.category_name}</Text>
+                        <Text style={[styles.category, {color: themeColors.textColor}]}>{data.stationInfo.category}</Text>
                         <Text style={[styles.subTitle, {color: themeColors.textColor}]}>Ngày lắp đặt: {formatAndDisplayDate(data.stationInfo.created_at)}</Text>
                     </View>
 
@@ -200,7 +200,6 @@ const styles = StyleSheet.create({
     image: {
         width: 180,
         height: 180,
-        borderColor: "#ccc",
         borderWidth: 1,
         borderRadius: 100,
         marginBottom: 5,

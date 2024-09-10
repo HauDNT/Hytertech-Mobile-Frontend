@@ -1,11 +1,14 @@
+import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { ThemeContext } from "../../../context/ThemeContext";
 
 const SensorParamCard = ({param, measure, timestamp}) => {
+    const { themeColors } = useContext(ThemeContext);
+
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: themeColors.secondaryBackgroundColor}]}>
             <Text style={styles.title}>{param} {measure}</Text>
-            <Text>{timestamp}</Text>
+            <Text style={{color: themeColors.textColor}}>{timestamp}</Text>
         </View>
     );
 };
@@ -16,6 +19,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 2,
         borderColor: "#eee",
+        marginHorizontal: 5,
     },
     title: {
         marginBottom: 24,

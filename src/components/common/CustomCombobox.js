@@ -10,7 +10,7 @@ const CustomCombobox = ({label, title, data, value, onChange = () => {}}) => {
         <View style={styles.container}>
             <Text style={[styles.label, {color: themeColors.textColor}]}>{label}</Text>
             <Dropdown
-                style={styles.dropdownMenu}
+                style={[styles.dropdownMenu, {backgroundColor: themeColors.inputBoxColor}]}
                 placeholderStyle={{ color: themeColors.textColor }}
                 selectedTextStyle={{ color: themeColors.textColor }}
                 data={data}
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
         borderWidth: 0.5, 
         borderColor: '#B5C0D0', 
         marginBottom: 10,
+        paddingLeft: 10,
     }
 });
 

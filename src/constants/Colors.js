@@ -3,6 +3,7 @@ const lightTheme = {
     textBlurColor: "#9BA4B4",
     blueColor: "#7EA1FF",
     redColor: "#F5004F",
+    greenColor: "#06D001",
     primaryBackgroundColor: "#FFFFFF",
     secondaryBackgroundColor: "#F5F7F8",
     borderColorLight: "#CCCCCC",
@@ -11,6 +12,7 @@ const lightTheme = {
     iconActive: "#7EA1FF",
     whiteColor: "#FFFFFF",
     headerColor: "#A2CA71",
+    inputBoxColor: "#FFFFFF",
 };
 
 const darkTheme = {
@@ -18,6 +20,7 @@ const darkTheme = {
     textBlurColor: "#B3B3B3",
     blueColor: "#7EA1FF",
     redColor: "#F5004F",
+    greenColor: "#06D001",
     primaryBackgroundColor: "#121212",
     secondaryBackgroundColor: "#292929",
     borderColorLight: "#FFFFFF33",
@@ -26,6 +29,7 @@ const darkTheme = {
     iconActive: "#FFFFFF",
     whiteColor: "#FFFFFF",
     headerColor: "#292929",
+    inputBoxColor: "#292929",
 };
 
 export default {lightTheme, darkTheme};

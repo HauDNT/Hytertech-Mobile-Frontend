@@ -1,37 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
-import {Text} from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import axiosInstance from "../../config/axiosInstance";
 import AppLoading from "../../components/common/AppLoading";
 import Layout from "../../components/layout/Layout";
 import EmptyData from "../../components/common/EmptyData";
 import FlatlistVertical from "../../components/layout/FlatlistVertical";
-import { formatAndDisplayDate } from "../../utils/FormatDate";
-import { UserInfoContext } from "../../context/UserInfoContext";
+import { StationsContext } from "../../context/StationsContext";
 
 const Stations = () => {
     const navigation = useNavigation();
-    const { userInfo } = useContext(UserInfoContext);
-    const [stationList, setStationList] = useState([]);
+    const { listStations } = useContext(StationsContext);
     const [isLoading, setIsLoading] = useState(true);
 
     const handlePressStationItem = (stationId) => {
         navigation.navigate("stationdetails", {id: stationId});
     };
 
-    const getStationBasicInfoList = async () => {
-        const response = (await axiosInstance.get(`/mobile/stations/${userInfo.id}`)).data.data;
-
-        response.map(item => item.created_at = formatAndDisplayDate(item.created_at));
-
-        return response;
-    };
-
     useEffect(() => {
-        getStationBasicInfoList().then(result => {
-            setStationList(result);
-        });
-
         setTimeout(() => {
             setIsLoading(false);
         }, 2000);
@@ -44,10 +28,10 @@ const Stations = () => {
         (
             <Layout>
                 {
-                    stationList?.length > 0 ?
+                    listStations?.length > 0 ?
                     (
                         <FlatlistVertical 
-                            data={stationList} 
+                            data={listStations} 
                             noteFields={["Số hiệu: ", "Ngày lắp đặt: "]}
                             fields={[
                                 "id",
