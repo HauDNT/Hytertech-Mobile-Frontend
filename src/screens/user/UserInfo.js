@@ -130,7 +130,7 @@ const UserInfo = () => {
         try {
             const response = await axiosInstance
                 .post(
-                    `/mobile/update/av1atar/${userInfo.id}`, 
+                    `/mobile/update/avatar/${userInfo.id}`, 
                     formData, 
                     {
                         headers: {'Content-Type': 'multipart/form-data'}
