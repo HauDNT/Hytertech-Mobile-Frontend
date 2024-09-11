@@ -1,70 +1,159 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import Toast from "react-native-toast-message";
+import axiosInstance from "../../config/axiosInstance";
 import Layout from "../../components/layout/Layout";
 import LineChartCustomSingleData from "../../components/specific/Charts/LineChartCustomSingleData";
 import CustomCombobox from "../../components/common/CustomCombobox";
 import CustomTable from "../../components/layout/CustomTable";
 import Divider from "../../components/common/Divider";
+import AppLoading from "../../components/common/AppLoading";
+import { formatAndDisplayDatetime } from "../../utils/FormatDateTime";
 
-const lineData = [
-    {value: 30, date: '01:00'},
-    {value: 35, date: '02:00'},
-    {value: 40, date: '03:00'},
-    {value: 28, date: '04:00'},
-    {value: 25, date: '05:00'},
-    {value: 50, date: '06:00'},
-    {value: 60, date: '07:00'},
-];
 
 const StatisticalDetails = ({ route }) => {
     const id = route.params.id;
 
-    return (
-        <Layout>
-            <View style={styles.container}>
-                <CustomCombobox
-                    label={"Chọn cảm biến"}
-                    title={"Chọn cảm biến"}
-                    data={
-                        [
-                            { label: 'Cảm biến số 1', value: 1 },
-                            { label: 'Cảm biến số 2', value: 2 },
-                            { label: 'Cảm biến số 3', value: 3 },
-                        ]
-                    }
-                />
+    const [data, setData] = useState({
+        isLoading: true,
+        sensorSelected: 0,
+        measureSelected: 0,
+        listSensors: [],
+        listMeasures: [],
+        listValues: [],
+    });
 
-                <View style={[styles.contentWrap, {marginBottom: 15}]}>
+    const updateData = (key, value) => {
+        setData(prevData => ({
+            ...prevData,
+            [key]: value
+        }));
+    };
+
+    const getMeasures = async (sensorId) => {
+        if (sensorId) {
+            const result = (await axiosInstance.get(`/mobile/measures?sensor_id=${sensorId}`)).data;
+            updateData("listMeasures", result.data);
+        }
+        else {
+            Toast.show({
+                type: 'warning',
+                text1: 'Vui lòng chọn cảm biến',
+            });
+            return;
+        }
+    };
+
+    const getValues = async (measureId) => {
+        if (data.sensorSelected && measureId) {
+            const result = (await axiosInstance.get(`/mobile/sensors/values?sensor_id=${data.sensorSelected}&measure_id=${measureId}`)).data;
+
+            result.map(data => {
+                const indexSlice = formatAndDisplayDatetime(data.created_at).indexOf(',');
+                data.created_at = formatAndDisplayDatetime(data.created_at).slice(0, indexSlice);
+            });
+
+            updateData("listValues", result);
+        }
+    };
+
+    const reRenderNewData = async () => {
+        updateData("isLoading", true);
+
+        await getMeasures(data.sensorSelected);
+        await getValues(data.measureSelected);
+
+        setTimeout(() => {
+            updateData("isLoading", false);
+        }, 2000);
+    };
+
+    useEffect(() => {
+        Promise
+            .all([
+                axiosInstance.get(`/mobile/sensors?station_id=${id}`),
+            ])
+            .then(([listSensorsRes]) => {
+                updateData("listSensors", listSensorsRes.data.data);
+
+                setTimeout(() => {
+                    updateData("isLoading", false);
+                }, 2000);
+            })
+            .catch(error => console.log(error));
+    }, []);
+
+    return (
+        data.isLoading ?
+        (<AppLoading/>)
+        :
+        (
+            <Layout>
+                <View style={styles.container}>
                     <CustomCombobox
-                        label={"Chọn thông số"}
-                        title={"Chọn thông số"}
+                        label={"Chọn cảm biến"}
+                        title={"Chọn cảm biến"}
                         data={
-                            [
-                                { label: 'Nhiệt độ', value: 1 },
-                                { label: 'Độ ẩm', value: 2 },
-                                { label: 'Độ pH', value: 3 },
-                                { label: 'Độ EC', value: 4 },
-                            ]
+                            data.listSensors.length > 0 ? (
+                                data.listSensors.map(sensor => (
+                                    {
+                                        label: sensor.name,
+                                        value: sensor.id,
+                                    }
+                                ))
+                            ) : (
+                                [{ label: 'Không có cảm biến nào', value: 0 }]
+                            )
                         }
+                        value={+data.sensorSelected}
+                        onChange={async (value) => {
+                            updateData("sensorSelected", value);
+                            await getMeasures(value);
+                        }}
                     />
 
+                    <View style={[styles.contentWrap, { marginBottom: 15 }]}>
+                        <CustomCombobox
+                            label={"Chọn thông số"}
+                            title={"Chọn thông số"}
+                            data={
+                                data.listMeasures.length > 0 ? (
+                                    data.listMeasures.map(measure => (
+                                        {
+                                            label: `${measure.name} (${measure.description})`,
+                                            value: measure.id,
+                                        }
+                                    ))
+                                ) : (
+                                    [{ label: 'Không có đơn vị đo', value: 0 }]
+                                )
+                            }
+                            value={+data.measureSelected}
+                            onChange={async (value) => {
+                                updateData("measureSelected", value);
+                                await getValues(value);
+                            }}
+                        />
+                    </View>
+
                     <LineChartCustomSingleData
-                        label={"Nhiệt độ"}
-                        data={lineData}
+                        label={"Biểu đồ thống kê số đo đã chọn trong ngày hôm nay"}
+                        data={data.listValues}
                         lineColor="#FF0000"
                         fillColor="#EF5A6F"
                         pointColor="#E72929"
+                        reRenderCallback={reRenderNewData}
                     />
-                </View>
 
-                <Divider/>
+                    <Divider />
 
-                <View style={styles.contentWrap}>
-                    <Text style={styles.subHeader}>Lịch sử đo đạc</Text>
-                    <CustomTable/>
+                    <View style={styles.contentWrap}>
+                        <Text style={styles.subHeader}>Lịch sử đo đạc</Text>
+                        <CustomTable />
+                    </View>
                 </View>
-            </View>
-        </Layout>
+            </Layout>
+        )
     );
 };
 
@@ -88,8 +177,8 @@ const styles = StyleSheet.create({
     subHeader: {
         marginTop: 5,
         fontSize: 15,
-        marginBottom: 10, 
-        paddingLeft: 5, 
+        marginBottom: 10,
+        paddingLeft: 5,
         fontWeight: "bold",
     },
 });

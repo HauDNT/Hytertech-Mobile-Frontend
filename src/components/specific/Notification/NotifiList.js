@@ -61,7 +61,9 @@ const NotifiList = ({ data, fields = []}) => {
                         </View>
                         <View style={styles.contentContainer}>
                             <View style={styles.headingMsg}>
-                                <Text style={[styles.msgTitle, {color: themeColors.textColor}]}>{title}</Text>
+                                <Text style={[styles.msgTitle, {color: themeColors.textColor}]} numberOfLines={1} ellipsizeMode="tail">
+                                    {title}
+                                </Text>
 
                                 {
                                     !isChecked && <View style={styles.point}></View>
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
     headingMsg: {
         flexDirection: "row",
         alignItems: "center",
-        width: "100%",
+        width: "95%",
         justifyContent: "space-between",
         marginTop: 3,
         marginBottom: 6,
@@ -168,6 +170,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     message: {
+        paddingTop: 10,
         paddingLeft: 15,
         fontSize: 14.5,
         lineHeight: 22,
