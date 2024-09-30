@@ -137,16 +137,21 @@ const SensorDetails = ({ route }) => {
 
                         <Divider/>
 
-                        <View style={styles.contentWrap}>
-                            <TouchableOpacity 
-                                onPress={() => updateSensorState()}
-                                style={[data.sensorData.status === 1 ? {backgroundColor: themeColors.greenColor} : {backgroundColor: themeColors.redColor}, styles.button]}
-                            >
-                                <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>{data.sensorData.status === 1 ? "Tắt" : "Bật"}</Text>
-                            </TouchableOpacity>
-                        </View>
+                        {
+                            data.sensorData.type == 1 && 
+                            <>
+                                <View style={styles.contentWrap}>
+                                    <TouchableOpacity 
+                                        onPress={() => updateSensorState()}
+                                        style={[data.sensorData.status === 1 ? {backgroundColor: themeColors.greenColor} : {backgroundColor: themeColors.redColor}, styles.button]}
+                                    >
+                                        <Text style={{fontWeight: "bold", fontSize: 20, color: "white"}}>{data.sensorData.status === 1 ? "Tắt" : "Bật"}</Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                        <Divider/>
+                                <Divider/>
+                            </>
+                        }
 
                         <View style={styles.contentWrap}>
                             <Text style={[styles.subHeader, {color: themeColors.textColor}]}>Lịch sử đo đạc</Text>
