@@ -74,7 +74,11 @@ const StatisticalDetails = ({ route }) => {
                 axiosInstance.get(`/mobile/sensors?station_id=${id}`),
             ])
             .then(([listSensorsRes]) => {
-                updateData("listSensors", listSensorsRes.data.data);
+                const sensorsType2 = listSensorsRes.data.data.map(sensor => {
+                    return sensor.type === "2" ? sensor : null;
+                }).filter(Boolean);
+
+                updateData("listSensors", sensorsType2);
 
                 setTimeout(() => {
                     updateData("isLoading", false);
@@ -145,12 +149,14 @@ const StatisticalDetails = ({ route }) => {
                         reRenderCallback={reRenderNewData}
                     />
 
-                    <Divider />
+                    {/* <Divider />
 
                     <View style={styles.contentWrap}>
                         <Text style={styles.subHeader}>Lịch sử đo đạc</Text>
-                        <CustomTable />
-                    </View>
+                        <CustomTable
+                            
+                        />
+                    </View> */}
                 </View>
             </Layout>
         )

@@ -14,7 +14,7 @@ const StationsProvider = ({children}) => {
                 const response = (await axiosInstance.get(`/mobile/stations/${userId}`)).data.data;
 
                 response.map(item => item.created_at = formatAndDisplayDate(item.created_at));
-        
+
                 setListStations(response);
             }
         } catch (error) {

@@ -17,7 +17,7 @@ import AppLoading from '../../components/common/AppLoading';
 const SensorDetails = ({ route }) => {
     const sensorId = route.params.id;
     const { themeColors } = useContext(ThemeContext);
-    const { listStations } = useContext(StationsContext);
+    // const { listStations } = useContext(StationsContext);
 
     const [data, setData] = useState({
         isLoading: true,
@@ -175,23 +175,23 @@ const SensorDetails = ({ route }) => {
                                             }
                                         }
                                     >
-                                        {({ handleChange, handleBlur, handleSubmit, values, setFieldValue }) => (
+                                        {({ handleChange, handleBlur, handleSubmit, values }) => (
                                         <View>
                                             <CustomInput 
                                                 label={"Tên cảm biến"}
                                                 handleChange={handleChange('sensorName')}
                                                 handleBlur={handleBlur('sensorName')}
-                                                value={values.sensorName}
+                                                value={values.sensorName || "Không có"}
                                                 enableEdit={false}
                                             />
                                             <CustomInput 
                                                 label={"Mô tả chức năng"}
                                                 handleChange={handleChange('sensorDetail')}
                                                 handleBlur={handleBlur('sensorDetail')}
-                                                value={values.sensorDetail}
+                                                value={values.sensorDetail || "Không có"}
                                                 enableEdit={false}
                                             />
-                                            <CustomCombobox 
+                                            {/* <CustomCombobox 
                                                 label={"Vị trí lắp đặt"}
                                                 title={"Chọn giàn"}
                                                 data={
@@ -203,11 +203,11 @@ const SensorDetails = ({ route }) => {
                                                 }
                                                 value={+values.sensorStation}
                                                 onChange={(value) => setFieldValue("sensorStation", value)}       
-                                            />
+                                            /> */}
 
-                                            <View style={{width: "97%", margin: "auto"}}>
+                                            {/* <View style={{width: "97%", margin: "auto"}}>
                                                 <Button onPress={handleSubmit} title="Cập nhật"/>
-                                            </View>
+                                            </View> */}
                                         </View>
                                         )}
                                     </Formik>

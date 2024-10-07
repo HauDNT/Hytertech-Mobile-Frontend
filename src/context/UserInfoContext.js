@@ -20,7 +20,7 @@ const UserInfoProvider = ({children}) => {
     const [userInfo, setUserInfo] = useState(initValues);
 
     const applyUserInfo = (data) => {
-        console.log("Applied Data: ", data);
+        // console.log("Applied Data: ", data);
         
         setUserInfo({
             ...userInfo,  // Kết hợp giá trị cũ với giá trị mới
