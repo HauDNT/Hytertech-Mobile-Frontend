@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import ModalImagePicker from "../common/Modals/ModalImagePicker";
 import blankImage from "../../assets/images/blank.png";
 
-const ImagePickerComponent = ({ currentImageUri, onImagePicked, otherStyles, options = "camera", acceptPicker = false }) => {
+const ImagePickerComponent = ({ currentImageUri, onImagePicked, otherStyles, acceptPicker = false }) => {
     const [data, setData] = useState({
         imageUri: null,
         modalVisible: false,

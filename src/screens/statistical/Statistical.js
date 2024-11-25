@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useNavigation } from '@react-navigation/native';
-import Toast from "react-native-toast-message";
 import AppLoading from "../../components/common/AppLoading";
 import EmptyData from "../../components/common/EmptyData";
 import Layout from "../../components/layout/Layout";
@@ -25,11 +24,6 @@ const Statistical = () => {
 
     useEffect(() => {
         setTimeout(() => {
-            Toast.show({
-                type: 'info',
-                text1: 'Chọn vào giàn muốn xem báo cáo thống kê',
-            });
-
             updateData("isLoading", false);
         }, 2000);
     }, []);

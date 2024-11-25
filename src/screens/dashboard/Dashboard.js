@@ -12,6 +12,7 @@ import { UserInfoContext } from "../../context/UserInfoContext";
 import ChartIcon from "../../assets/icons/chart-icon.png";
 import ContactIcon from "../../assets/icons/contact-icon.jpg";
 import StationIcon from "../../assets/icons/station-icon.png";
+import BacteriaIcon from "../../assets/icons/bacteria-icon.png";
 import RatingIcon from "../../assets/icons/rating-icon.png";
 import GuideIcon from "../../assets/icons/guide-icon.png";
 
@@ -26,8 +27,8 @@ const Dashboard = ({themeColors}) => {
 
     const textCards = [
         "Trạm",
-        // "Cảm biến",
         "Thống kê",
+        "Chuẩn đoán",
         "Hỗ trợ",
         "Hướng dẫn sử dụng",
         "Đánh giá",
@@ -35,8 +36,8 @@ const Dashboard = ({themeColors}) => {
 
     const iconCards = [
         StationIcon,
-        // SensorIcon,
         ChartIcon,
+        BacteriaIcon,
         ContactIcon,
         GuideIcon,
         RatingIcon,
@@ -44,8 +45,8 @@ const Dashboard = ({themeColors}) => {
 
     const redirectLinks = [
         "stations",
-        // "sensors",
         "statistical",
+        "bacteria",
         "support",
         "guide",
         "rating",
@@ -68,7 +69,7 @@ const Dashboard = ({themeColors}) => {
                         <Divider/>
                         <View style={[styles.content, {backgroundColor: themeColors.primaryBackgroundColor}]}>
                             <GridLayout 
-                                amountItems={5} 
+                                amountItems={6} 
                                 itemsOfRow={2}
                                 textCards={textCards}
                                 iconCards={iconCards}

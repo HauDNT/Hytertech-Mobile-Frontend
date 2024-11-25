@@ -60,6 +60,7 @@ const FlatlistVertical = ({ data, noteFields = [], fields = [], onItemPress = ()
                     <Image 
                         source={
                             image !== "" ?
+                            // ({uri: image})
                             ({uri: image})
                             :
                             (blankImage)

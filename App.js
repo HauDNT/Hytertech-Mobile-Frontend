@@ -18,6 +18,7 @@ import Rating from "./src/screens/rating/Rating";
 import UserInfo from "./src/screens/user/UserInfo";
 import Notification from "./src/screens/notification/Notification";
 import Settings from "./src/screens/settings/Settings";
+import Bacteria from "./src/screens/bacteria/Bacteria";
 
 // Context API
 import ContainerContext from "./src/context/ContainerContext";
@@ -73,6 +74,7 @@ function NavigationWithTheme() {
                 <Stack.Screen name="userinfo" component={UserInfo} options={{ title: "Thông tin cá nhân" }}/>
                 <Stack.Screen name="notification" component={Notification} options={{ title: "Thông báo" }}/>
                 <Stack.Screen name="settings" component={Settings} options={{ title: "Cài đặt" }}/>
+                <Stack.Screen name="bacteria" component={Bacteria} options={{ title: "Chuẩn đoán sâu bệnh" }}/>
             </Stack.Navigator>
             <Toast 
                 config={configToast} 

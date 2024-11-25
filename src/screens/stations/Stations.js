@@ -5,6 +5,7 @@ import Layout from "../../components/layout/Layout";
 import EmptyData from "../../components/common/EmptyData";
 import FlatlistVertical from "../../components/layout/FlatlistVertical";
 import { StationsContext } from "../../context/StationsContext";
+import envConfig from "../../config/EnvConfig";
 
 const Stations = () => {
     const navigation = useNavigation();
@@ -31,7 +32,12 @@ const Stations = () => {
                     listStations?.length > 0 ?
                     (
                         <FlatlistVertical 
-                            data={listStations} 
+                            data={listStations.map(station => ({
+                                id: station.id,
+                                name: station.name,
+                                image: `${envConfig.URL_LOAD_IMG_FROM_SERVER + station.image}`,
+                                created_at: station.created_at,
+                            }))} 
                             noteFields={["Số hiệu: ", "Ngày lắp đặt: "]}
                             fields={[
                                 "id",

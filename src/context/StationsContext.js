@@ -18,8 +18,6 @@ const StationsProvider = ({children}) => {
                 setListStations(response);
             }
         } catch (error) {
-            console.log(error);
-            
             Toast.show({
                 type: 'error',
                 text1: 'Lỗi khi tải về dữ liệu các giàn từ máy chủ.',
